@@ -6,8 +6,8 @@ Source lives in `src/` with a TanStack Router entry in `router.tsx` and file-bas
 ## Build, Test, and Development Commands
 - `pnpm install`: install workspace dependencies (required before any other command).
 - `pnpm dev`: launch TanStack Dev with HMR on the configured port.
-- `pnpm build`: create an optimized production bundle via `tanstack build`.
-- `pnpm start`: serve the production build locally to verify SSR/CSR parity.
+- `pnpm build`: create an optimized production bundle via Vite's TanStack Start plugin (`vite build`).
+- `pnpm start`: serve the production build locally via the Nitro output (`node .output/server/index.mjs`) to verify SSR/CSR parity.
 - `pnpm test`: run Vitest in batch mode; add `--watch` during active development.
 - `pnpm lint`, `pnpm format`, `pnpm check`: run ESLint, Prettier, or the combined fix-all pipeline.
 
