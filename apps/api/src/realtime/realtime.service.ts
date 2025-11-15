@@ -5,6 +5,7 @@ import { UpdateRealtimeDto } from './dto/update-realtime.dto';
 @Injectable()
 export class RealtimeService {
   create(createRealtimeDto: CreateRealtimeDto) {
+    void createRealtimeDto;
     return 'This action adds a new realtime';
   }
 
@@ -17,6 +18,7 @@ export class RealtimeService {
   }
 
   update(id: number, updateRealtimeDto: UpdateRealtimeDto) {
+    void updateRealtimeDto;
     return `This action updates a #${id} realtime`;
   }
 

@@ -1,34 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+
+import { CurrentUser } from '../auth/current-user.decorator';
+import {
+  SessionUserGuard,
+  type RequestUser,
+} from '../auth/guards/session-user.guard';
+import { UpgradeWorldDto } from './dto/upgrade-world.dto';
 import { WorldService } from './world.service';
-import { CreateWorldDto } from './dto/create-world.dto';
-import { UpdateWorldDto } from './dto/update-world.dto';
 
 @Controller('world')
+@UseGuards(SessionUserGuard)
 export class WorldController {
   constructor(private readonly worldService: WorldService) {}
 
-  @Post()
-  create(@Body() createWorldDto: CreateWorldDto) {
-    return this.worldService.create(createWorldDto);
-  }
-
   @Get()
-  findAll() {
-    return this.worldService.findAll();
+  getState(@CurrentUser() user: RequestUser) {
+    return this.worldService.getState(user.id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.worldService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWorldDto: UpdateWorldDto) {
-    return this.worldService.update(+id, updateWorldDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.worldService.remove(+id);
+  @Post('upgrade')
+  upgrade(@CurrentUser() user: RequestUser, @Body() dto: UpgradeWorldDto) {
+    return this.worldService.recordUpgrade(user.id, dto.room);
   }
 }

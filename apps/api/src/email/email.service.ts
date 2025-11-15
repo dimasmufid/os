@@ -117,7 +117,7 @@ export class EmailService {
     const { error } = await this.resend.emails.send(message);
 
     if (error) {
-      throw error;
+      throw new Error(error.message);
     }
   }
 }

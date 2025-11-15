@@ -52,8 +52,7 @@ const normalizeBaseUrl = (value: string) => {
   url.hash = '';
   url.search = '';
 
-  const pathname =
-    url.pathname === '/' ? '' : url.pathname.replace(/\/$/, '');
+  const pathname = url.pathname === '/' ? '' : url.pathname.replace(/\/$/, '');
 
   return `${url.origin}${pathname}`;
 };

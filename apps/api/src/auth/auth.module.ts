@@ -3,9 +3,10 @@ import { AuthModule as BetterAuthModule } from '@thallesp/nestjs-better-auth';
 
 import { EmailModule } from '../email/email.module';
 import { AuthController } from './auth.controller';
+import { EmailService } from '../email/email.service';
+import { SessionUserGuard } from './guards/session-user.guard';
 import { createBetterAuthInstance } from './better-auth.factory';
 import { AuthService } from './auth.service';
-import { EmailService } from '../email/email.service';
 
 @Module({
   imports: [
@@ -13,13 +14,13 @@ import { EmailService } from '../email/email.service';
     BetterAuthModule.forRootAsync({
       imports: [EmailModule],
       inject: [EmailService],
-      useFactory: async (emailService: EmailService) => ({
+      useFactory: (emailService: EmailService) => ({
         auth: createBetterAuthInstance(emailService),
       }),
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
-  exports: [AuthService],
+  providers: [AuthService, SessionUserGuard],
+  exports: [AuthService, SessionUserGuard],
 })
 export class AuthModule {}

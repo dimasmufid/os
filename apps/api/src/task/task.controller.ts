@@ -1,34 +1,49 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { TaskService } from './task.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+
+import { CurrentUser } from '../auth/current-user.decorator';
+import {
+  SessionUserGuard,
+  type RequestUser,
+} from '../auth/guards/session-user.guard';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { TaskService } from './task.service';
 
-@Controller('task')
+@Controller('tasks')
+@UseGuards(SessionUserGuard)
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.taskService.create(createTaskDto);
-  }
-
   @Get()
-  findAll() {
-    return this.taskService.findAll();
+  findAll(@CurrentUser() user: RequestUser) {
+    return this.taskService.findAll(user.id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.findOne(+id);
+  @Post()
+  create(@CurrentUser() user: RequestUser, @Body() dto: CreateTaskDto) {
+    return this.taskService.create(user.id, dto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.taskService.update(+id, updateTaskDto);
+  update(
+    @CurrentUser() user: RequestUser,
+    @Param('id') id: string,
+    @Body() dto: UpdateTaskDto,
+  ) {
+    return this.taskService.update(user.id, id, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.taskService.remove(+id);
+  remove(@CurrentUser() user: RequestUser, @Param('id') id: string) {
+    return this.taskService.remove(user.id, id);
   }
 }

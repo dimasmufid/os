@@ -14,9 +14,11 @@ import { StorageModule } from './storage/storage.module';
 import { UserModule } from './user/user.module';
 import { TaskModule } from './task/task.module';
 import { ItemModule } from './item/item.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     EmailModule,
     AuthModule,
     HeroModule,

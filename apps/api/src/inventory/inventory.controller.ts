@@ -1,34 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+
+import { CurrentUser } from '../auth/current-user.decorator';
+import {
+  SessionUserGuard,
+  type RequestUser,
+} from '../auth/guards/session-user.guard';
+import { EquipCosmeticDto } from './dto/equip-cosmetic.dto';
 import { InventoryService } from './inventory.service';
-import { CreateInventoryDto } from './dto/create-inventory.dto';
-import { UpdateInventoryDto } from './dto/update-inventory.dto';
 
 @Controller('inventory')
+@UseGuards(SessionUserGuard)
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}
 
-  @Post()
-  create(@Body() createInventoryDto: CreateInventoryDto) {
-    return this.inventoryService.create(createInventoryDto);
-  }
-
   @Get()
-  findAll() {
-    return this.inventoryService.findAll();
+  list(@CurrentUser() user: RequestUser) {
+    return this.inventoryService.list(user.id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.inventoryService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInventoryDto: UpdateInventoryDto) {
-    return this.inventoryService.update(+id, updateInventoryDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.inventoryService.remove(+id);
+  @Post('equip')
+  equip(@CurrentUser() user: RequestUser, @Body() dto: EquipCosmeticDto) {
+    return this.inventoryService.equip(user.id, dto);
   }
 }

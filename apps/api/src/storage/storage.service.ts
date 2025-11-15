@@ -5,6 +5,7 @@ import { UpdateStorageDto } from './dto/update-storage.dto';
 @Injectable()
 export class StorageService {
   create(createStorageDto: CreateStorageDto) {
+    void createStorageDto;
     return 'This action adds a new storage';
   }
 
@@ -17,6 +18,7 @@ export class StorageService {
   }
 
   update(id: number, updateStorageDto: UpdateStorageDto) {
+    void updateStorageDto;
     return `This action updates a #${id} storage`;
   }
 

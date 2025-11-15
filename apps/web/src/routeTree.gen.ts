@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as WorldRouteImport } from './routes/world'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
@@ -88,6 +89,11 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
   path: '/demo/start/ssr/data-only',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorldRoute = WorldRouteImport.update({
+  id: '/world',
+  path: '/world',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
   '/demo/start/ssr': typeof DemoStartSsrIndexRoute
+  '/world': typeof WorldRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
   '/demo/start/ssr': typeof DemoStartSsrIndexRoute
+  '/world': typeof WorldRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
   '/demo/start/ssr/': typeof DemoStartSsrIndexRoute
+  '/world': typeof WorldRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/demo/start/ssr/full-ssr'
     | '/demo/start/ssr/spa-mode'
     | '/demo/start/ssr'
+    | '/world'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/demo/start/ssr/full-ssr'
     | '/demo/start/ssr/spa-mode'
     | '/demo/start/ssr'
+    | '/world'
   id:
     | '__root__'
     | '/'

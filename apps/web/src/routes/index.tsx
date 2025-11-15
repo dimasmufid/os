@@ -1,11 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import {
-  Zap,
-  Server,
   Route as RouteIcon,
+  Server,
   Shield,
-  Waves,
   Sparkles,
+  Waves,
+  Zap,
 } from 'lucide-react'
 
 export const Route = createFileRoute('/')({ component: App })
@@ -85,6 +85,12 @@ function App() {
             >
               Documentation
             </a>
+            <Link
+              to="/world"
+              className="px-8 py-3 bg-slate-900/70 border border-slate-700 hover:border-cyan-500/60 text-white font-semibold rounded-lg transition-colors"
+            >
+              Enter the LifeOS World
+            </Link>
             <p className="text-gray-400 text-sm mt-2">
               Begin your TanStack Start journey by editing{' '}
               <code className="px-2 py-1 bg-slate-700 rounded text-cyan-400">
