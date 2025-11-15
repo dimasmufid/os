@@ -149,6 +149,32 @@ docker-compose logs -f
 docker-compose down
 ```
 
+## 🗄️ Database Setup (Drizzle + PostgreSQL)
+
+1. Copy the sample environment file and tweak the `DATABASE_URL` if needed:
+   ```bash
+   cp .env.example .env.local
+   ```
+2. Generate `.env.postgres` so Docker Compose can extract individual credentials from your `DATABASE_URL`:
+   ```bash
+   pnpm db:env
+   ```
+3. Boot PostgreSQL through Docker Compose (data persists in the `postgres_data` volume):
+   ```bash
+   docker compose up -d postgres
+   ```
+4. Generate SQL snapshots from the Drizzle schema and push them to the database:
+   ```bash
+   pnpm --filter @nesra-town/db generate
+   pnpm --filter @nesra-town/db migrate
+   ```
+5. Inspect the database with Drizzle Studio whenever you need to debug data:
+   ```bash
+   pnpm --filter @nesra-town/db studio
+   ```
+
+Run `pnpm db:env` whenever the `DATABASE_URL` changes so `.env.postgres` stays in sync. Both files are gitignored to keep secrets local.
+
 ## 🎯 Core Features (v1)
 
 - **World & Movement**: 2D tilemap with WASD controls, multiple rooms (Study, Build, Training)
@@ -231,4 +257,3 @@ See individual LICENSE files in backend/ and frontend/ directories.
 **Status**: Active Development  
 **Version**: 1.0 (Draft)  
 **Last Updated**: 2025-11-15
-

@@ -1,0 +1,94 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      target: production
+    container_name: nesra_web
+    restart: unless-stopped
+    env_file:
+      - ./apps/web/.env.production
+    environment:
+      # API base URL from inside the docker network
+      NEXT_PUBLIC_API_BASE_URL: http://api:4000
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+    networks:
+      - app_net
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+      target: production
+    container_name: nesra_api
+    restart: unless-stopped
+    env_file:
+      - ./apps/api/.env.production
+    environment:
+      # Remote Postgres (prod DB), no local Postgres container
+      DATABASE_URL: ${DATABASE_URL}
+
+      # Redis & MinIO inside the docker network
+      REDIS_URL: redis://redis:6379
+
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-nesra}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-super-secret}
+      MINIO_BUCKET: ${MINIO_BUCKET:-nesra-town}
+
+      # For WebSocket / CORS config if needed
+      API_PUBLIC_URL: ${API_PUBLIC_URL:-https://api.yourdomain.com}
+      WEB_PUBLIC_URL: ${WEB_PUBLIC_URL:-https://app.yourdomain.com}
+    depends_on:
+      - redis
+      - minio
+    ports:
+      - "4000:4000" # HTTP + WS
+    networks:
+      - app_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: nesra_redis
+    restart: unless-stopped
+    command: >
+      redis-server --save 60 1 --loglevel warning
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app_net
+
+  minio:
+    image: minio/minio:latest
+    container_name: nesra_minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000" # S3 API
+      - "9001:9001" # Console
+    env_file:
+      - ./.env.minio # optional, or use env below
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-nesra}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-super-secret}
+      # Optional but recommended when you put MinIO behind a domain:
+      # MINIO_SERVER_URL: ${MINIO_SERVER_URL:-https://storage.yourdomain.com}
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - app_net
+
+volumes:
+  redis_data:
+  minio_data:
+
+networks:
+  app_net:
+    driver: bridge

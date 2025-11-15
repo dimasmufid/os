@@ -5,6 +5,11 @@
     "lib": ["ES2022", "DOM"],
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@nesra-town/ui": ["./src/index.ts"],
+      "@nesra-town/ui/*": ["./src/*"]
+    },
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -16,4 +21,3 @@
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
-

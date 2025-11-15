@@ -1,31 +1,26 @@
 # Repository Guidelines
 
-This document captures the rules needed to work consistently across the FastAPI backend and Next.js frontend.
-
 ## Project Structure & Module Organization
-`backend/` hosts the FastAPI service (`src/` code, `alembic/versions` migrations, `entrypoints/` gunicorn scripts, `scripts/` helpers). `frontend/` contains the Next.js 16 app (routes in `src/app`, shared UI in `src/components`, utilities in `src/lib`, static assets in `public/`). Use the root `docker-compose.yml` to run both tiers locally and keep infra/config files beside their service.
+PNPM and Turbo manage this monorepo. `apps/web` hosts the TanStack Start frontend; routes live in `src/routes` and shared UI in `src/components`. `apps/api` houses the NestJS backend with domain modules under `src` and request specs in `test`. Shared packages include `ui` (design system), `types` (cross-app DTOs), and `db` (Drizzle schema + migrations). Keep `ai/specs` and `ai/docs` synchronized whenever gameplay flows or API behavior changes.
 
-## Build, Test & Development Commands
-- `cd backend && just run` – start the FastAPI dev server.
-- `just up`, `just mm <slug>`, `just migrate` – launch Postgres, autogenerate migrations, then upgrade.
-- `cd backend && just lint` – apply `ruff format` and `ruff check --fix`.
-- `cd frontend && pnpm run dev | pnpm run build | pnpm run start` – dev loop, production build, and preview.
-- `docker-compose up -d --build` – build/run both services using the shared `.env`.
+## Build, Test, and Development Commands
+- `pnpm install` – install workspace dependencies  
+- `pnpm dev` – turbo-powered watch mode for web + api  
+- `pnpm build` – production build for apps and packages  
+- `pnpm lint` – run repo-wide ESLint targets  
+- `pnpm test` – orchestrate Vitest and Jest suites  
+- `pnpm --filter web dev` – start the frontend dev server  
+- `pnpm --filter api start:dev` – run the NestJS dev server  
+- `pnpm --filter @nesra-town/db migrate` – execute Drizzle migrations  
 
 ## Coding Style & Naming Conventions
-Backend code targets Python 3.11+, four-space indents, explicit type hints, and snake_case packages (`src/auth`, `src/utils`). Shared schemas stay in `schemas.py`, endpoints return typed Pydantic models, and Ruff (see `backend/ruff.toml`) owns formatting + linting. Frontend modules run in TypeScript strict mode, React components use `PascalCase`, hooks/utilities use `camelCase`, and Tailwind-generated order stands; keep reusable widgets in `src/components` and colocate feature-specific files.
+All code is TypeScript-first and strict ESM. Prettier (single quotes, trailing commas) plus ESLint define formatting—enable format-on-save. Use two-space indentation, PascalCase React components, camelCase helpers/hooks, and kebab-case route folders. Group Nest controllers/services/modules inside domain folders (`sessions/sessions.service.ts`). Export shared interfaces from `packages/types`, colocate reusable UI in `packages/ui/src/components/<Component>/`, and manage schema or SQL changes exclusively through `packages/db`.
 
 ## Testing Guidelines
-Place backend tests in `backend/tests/` mirroring the module tree and drive endpoints with `pytest` + `httpx.AsyncClient`; run suites via `poetry run pytest --maxfail=1 --disable-warnings --cov=src` and target ≥80 % coverage, including migration smoke checks (`alembic upgrade head`). Frontend work should ship React Testing Library or Playwright specs beside the component and expose them through an `pnpm run test` script so CI can consume them.
+Vitest + Testing Library power the frontend suite (`pnpm --filter web test`); Nest’s Jest harness covers the API (`pnpm --filter api test`). Place specs next to their subjects (`*.test.tsx`, `*.spec.ts`), describe observable behavior, and include a failure-path assertion for every feature. Database or repository changes demand an integration spec that touches the Drizzle layer. Run `pnpm test` and `pnpm --filter api test:cov` before opening a pull request.
 
 ## Commit & Pull Request Guidelines
-Use short, imperative commit subjects with a scope prefix (`feat: add leaderboard endpoint`, `fix: handle empty scores`). PRs should cover intent, implementation notes, validation evidence (commands, screenshots, curl output), and issue links. Explicitly mention required rollouts such as `just migrate` or env changes so deployers know the sequence.
+Follow Conventional Commits with scope prefixes (`feat(web): quest timer`). Keep commits atomic and include any required schema or documentation updates. Pull requests must summarize the change, link the tracking issue, attach UI proof when relevant, and state lint/test status. Request review from the owning module team before merging.
 
 ## Security & Configuration Tips
-Never commit secrets: copy `.env` locally, keep `.env.example` current, and use managed secrets in production. Backend code consumes `DATABASE_URL`, `DATABASE_ASYNC_URL`, `ENVIRONMENT`, CORS arrays, and optional `SENTRY_DSN`; document new vars in `src/config.py`. The frontend build needs `NEXT_PUBLIC_API_BASE_URL` set (env or Docker arg) before running `pnpm run dev` or `pnpm run build`.
-
-## Rules
-
-- for create snapshot for db migration, always init by command `just mm *migration_name*`. only after that, you can edit the snapshot file to add the changes. **DO NOT CREATE SNAPSHOT FILE MANUALLY**.
-- always use `shadcn ui` for ui components.
-- always use `zod` for form validation in frontend.
+Never commit secrets. Copy env files from `apps/*/.env.example`, store real values in `.env.local`, and point `DATABASE_URL` at the Dockerized Postgres instance used by Drizzle. Validate inputs with Zod on the web tier and Nest pipes on the API tier, and refresh `ai/specs` whenever responses or reward logic change so dependent agents stay accurate.

@@ -5,17 +5,17 @@
   "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "src/styles.css",
+    "css": "apps/web/src/styles.css",
     "baseColor": "zinc",
     "cssVariables": true,
     "prefix": ""
   },
   "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
+    "components": "@nesra-town/ui/components",
+    "utils": "@nesra-town/ui/lib/utils",
+    "ui": "@nesra-town/ui/components/ui",
+    "lib": "@nesra-town/ui/lib",
+    "hooks": "@nesra-town/ui/hooks"
   },
   "iconLibrary": "lucide"
 }

@@ -4,15 +4,25 @@ Shared database schema and migrations using Drizzle ORM.
 
 ## Setup
 
-1. Install dependencies:
+1. Copy the root `.env.example` to `.env.local` so Drizzle commands can read `DATABASE_URL`:
    ```bash
-   pnpm install
+   cp .env.example .env.local # run from the repo root
+   ```
+2. Populate `.env.postgres` from your `DATABASE_URL` (rerun whenever the URL changes):
+   ```bash
+   pnpm db:env
+   ```
+3. Start PostgreSQL via Docker Compose:
+   ```bash
+   docker compose up -d postgres
+   ```
+4. Generate & apply migrations after editing `src/schema.ts`:
+   ```bash
+   pnpm --filter @nesra-town/db generate
+   pnpm --filter @nesra-town/db migrate
    ```
 
-2. Set up environment variables:
-   ```bash
-   DATABASE_URL=postgresql://user:password@localhost:5432/nesra_town
-   ```
+Docker Compose reads `.env.postgres`, so remember to rerun `pnpm db:env` whenever `DATABASE_URL` changes.
 
 ## Commands
 
@@ -28,3 +38,12 @@ Import the schema in your apps:
 import { users } from "@nesra-town/db";
 ```
 
+The package also ships a lazy Postgres client helper you can reuse in services:
+
+```typescript
+import { getDb } from "@nesra-town/db";
+
+const db = getDb(); // reads DATABASE_URL from process.env
+```
+
+Call `closeDb()` inside test teardown hooks when you need to gracefully shut down the underlying `postgres` connection.

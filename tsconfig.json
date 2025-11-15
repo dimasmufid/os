@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@nesra-town/ui": ["packages/ui/src/index.ts"],
+      "@nesra-town/ui/*": ["packages/ui/src/*"]
+    }
+  }
+}
