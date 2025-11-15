@@ -19,24 +19,29 @@ The goal is to replace dopamine-draining activities with a dopamine-positive eco
 
 ## 🏗️ Tech Stack
 
-- **Backend**: FastAPI (Python 3.11+) with SQLAlchemy, Alembic migrations
-- **Frontend**: Next.js 15 with TypeScript, React, Tailwind CSS, Phaser.js
-- **Database**: PostgreSQL
-- **Package Managers**: Poetry (backend), Bun (frontend)
-- **Development**: Docker Compose, Justfile recipes
+- **Backend**: NestJS with TypeScript
+- **Frontend**: TanStack Start (React) with TypeScript, Tailwind CSS
+- **Database**: PostgreSQL with Drizzle ORM
+- **Package Manager**: pnpm
+- **Monorepo**: Turborepo
+- **Development**: Docker Compose
 
 ## 📁 Project Structure
 
 ```
 .
-├── backend/          # FastAPI backend service
-│   ├── src/         # Source code
-│   ├── tests/       # Test suites
-│   └── alembic/     # Database migrations
-├── frontend/         # Next.js frontend application
-│   ├── src/app/     # Next.js routes
-│   ├── src/components/  # React components
-│   └── src/lib/     # Utilities and helpers
+├── apps/
+│   ├── api/         # NestJS backend service
+│   │   ├── src/     # Source code
+│   │   └── test/    # Test suites
+│   └── web/         # TanStack Start frontend application
+│       ├── src/routes/     # File-based routes
+│       ├── src/components/  # React components
+│       └── src/lib/     # Utilities and helpers
+├── packages/
+│   ├── db/          # Drizzle schema and migrations
+│   ├── ui/          # Shared UI components
+│   └── types/       # Shared TypeScript types
 ├── ai/              # AI agent specifications and docs
 │   ├── specs/       # Specification documents
 │   └── docs/        # Documentation for AI agents
@@ -47,9 +52,8 @@ The goal is to replace dopamine-draining activities with a dopamine-positive eco
 
 ### Prerequisites
 
-- **Just**: Command runner ([Installation guide](https://github.com/casey/just))
-- **Poetry**: Python dependency management ([Installation guide](https://python-poetry.org/docs/#installation))
-- **Bun**: JavaScript runtime and package manager
+- **Node.js**: >=18.0.0 ([Installation guide](https://nodejs.org/))
+- **pnpm**: >=8.0.0 ([Installation guide](https://pnpm.io/installation))
 - **Docker & Docker Compose**: For local database and services
 
 ### Quick Start
@@ -57,83 +61,108 @@ The goal is to replace dopamine-draining activities with a dopamine-positive eco
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd game
+   cd os
    ```
 
-2. **Set up environment variables**
+2. **Install dependencies**
    ```bash
-   # Backend
-   cd backend
-   cp .env.example .env
-   # Edit .env with your configuration
+   pnpm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   # Copy example env file and update with your configuration
+   cp .env.example .env.local
+   # Edit .env.local with your DATABASE_URL and other settings
    
-   # Frontend
-   cd ../frontend
-   cp .env.example .env
-   # Set NEXT_PUBLIC_API_BASE_URL
+   # Generate .env.postgres for Docker Compose
+   pnpm db:env
    ```
 
-3. **Start the database**
+4. **Start the database**
    ```bash
-   just up  # Starts PostgreSQL in Docker
+   docker compose up -d postgres
    ```
 
-4. **Set up backend**
+5. **Run database migrations**
    ```bash
-   cd backend
-   poetry install
-   just migrate  # Run database migrations
-   just run      # Start FastAPI dev server
+   pnpm --filter @os/db generate
+   pnpm --filter @os/db migrate
    ```
 
-5. **Set up frontend**
+6. **Start development servers**
    ```bash
-   cd frontend
-   bun install
-   bun dev  # Start Next.js dev server
+   pnpm dev  # Starts both API and web in watch mode
    ```
 
-6. **Access the application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
-   - API Docs: http://localhost:8000/docs
+7. **Access the application**
+   - Frontend: <http://localhost:3000>
+   - Backend API: <http://localhost:3000> (configure via `PORT` env variable in `.env.local` if needed)
 
 ## 🛠️ Development
 
-### Backend Commands
+### Workspace Commands
 
 ```bash
-cd backend
+# Run all apps in development mode
+pnpm dev
 
-# Run development server
-just run
+# Build all apps and packages
+pnpm build
 
-# Run linters
-just lint
+# Run linters across workspace
+pnpm lint
 
-# Create migration
-just mm <migration_name>
-
-# Run migrations
-just migrate
-
-# Downgrade migrations
-just downgrade -1
+# Run tests across workspace
+pnpm test
 ```
 
-### Frontend Commands
+### Backend Commands (NestJS)
 
 ```bash
-cd frontend
+# Run development server
+pnpm --filter api dev
 
-# Development server
-bun dev
+# Build for production
+pnpm --filter api build
 
-# Production build
-bun run build
+# Run tests
+pnpm --filter api test
+
+# Run tests with coverage
+pnpm --filter api test:cov
+```
+
+### Frontend Commands (TanStack Start)
+
+```bash
+# Run development server
+pnpm --filter web dev
+
+# Build for production
+pnpm --filter web build
 
 # Start production server
-bun run start
+pnpm --filter web start
+
+# Run tests
+pnpm --filter web test
+```
+
+### Database Commands
+
+```bash
+# Generate migrations from schema changes
+pnpm --filter @os/db generate
+
+# Run migrations
+pnpm --filter @os/db migrate
+
+# Open Drizzle Studio (database GUI)
+pnpm --filter @os/db studio
+
+# Sync .env.postgres from DATABASE_URL
+pnpm db:env
 ```
 
 ### Running with Docker Compose
@@ -196,28 +225,32 @@ Run `pnpm db:env` whenever the `DATABASE_URL` changes so `.env.postgres` stays i
 - **[Product Requirements Document (PRD)](./ai/specs/prd.md)**: Complete product specifications
 - **[Backend Specifications](./ai/specs/backend.md)**: Backend architecture and API details
 - **[Frontend Specifications](./ai/specs/frontend.md)**: Frontend architecture and component structure
-- **[Backend README](./backend/README.md)**: Backend-specific setup and development guide
-- **[Frontend README](./frontend/README.md)**: Frontend-specific setup and development guide
+- **[Backend README](./apps/api/README.md)**: Backend-specific setup and development guide
+- **[Frontend README](./apps/web/README.md)**: Frontend-specific setup and development guide
 
 ## 🧪 Testing
 
-### Backend Tests
+### Backend Tests (Jest)
 ```bash
-cd backend
-poetry run pytest --maxfail=1 --disable-warnings --cov=src
+pnpm --filter api test
+pnpm --filter api test:cov  # With coverage
 ```
 
-### Frontend Tests
+### Frontend Tests (Vitest)
 ```bash
-cd frontend
-bun run test
+pnpm --filter web test
+```
+
+### Run All Tests
+```bash
+pnpm test
 ```
 
 ## 🔒 Security
 
 - Authentication required for all API endpoints
 - Backend validates all reward logic
-- Never commit secrets - use `.env` files locally
+- Never commit secrets - use `.env.local` files locally
 - Keep `.env.example` files updated
 
 ## 🗺️ Roadmap
