@@ -3,13 +3,13 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Injectable()
-export class TasksService {
+export class TaskService {
   create(createTaskDto: CreateTaskDto) {
     return 'This action adds a new task';
   }
 
   findAll() {
-    return `This action returns all tasks`;
+    return `This action returns all task`;
   }
 
   findOne(id: number) {
