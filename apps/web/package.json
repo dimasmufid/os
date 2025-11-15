@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tanstack dev",
-    "build": "tanstack build",
-    "start": "tanstack start",
+    "dev": "vite dev",
+    "build": "vite build",
+    "start": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
     "format": "prettier",

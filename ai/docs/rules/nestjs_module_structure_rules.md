@@ -20,7 +20,6 @@ inventory
 item
 storage
 realtime
-database
 config
 ```
 
@@ -90,7 +89,6 @@ InventoryModule
 ItemModule
 StorageModule
 RealtimeModule
-DatabaseModule
 ConfigModule
 ```
 
@@ -204,34 +202,7 @@ Frontend subscribes and updates UI reactively.
 | World         | REST  | World state, room levels, streaks |
 | Storage       | REST  | File upload/download (MinIO) |
 | Realtime      | WS    | Event gateway (broadcast updates) |
-| Database      | Provider | Drizzle initialization |
 | Config        | Provider | Env configuration |
-
----
-
-# 7. Database (Drizzle) Rules
-
-## 7.1 Use a shared package:
-```
-/packages/db/
-```
-
-Contains:
-- Schema
-- Drizzle client
-- Migration config
-
-Import this into each module’s repository layer.
-
-## 7.2 Repository Pattern Recommended
-Keep Drizzle queries **out of services**.
-
-Example:
-```
-HeroRepository → queries
-HeroService → business logic
-HeroController → HTTP endpoints
-```
 
 ---
 
