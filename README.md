@@ -204,6 +204,29 @@ docker-compose down
 
 Run `pnpm db:env` whenever the `DATABASE_URL` changes so `.env.postgres` stays in sync. Both files are gitignored to keep secrets local.
 
+## 🔐 Authentication
+
+The Nest API now hosts [Better Auth](https://better-auth.com/) under `/api/auth/*`, backed by the shared Drizzle/PostgreSQL database, Resend for transactional emails, and Google OAuth.
+
+1. Add the following variables to `.env.local` (see `.env.example` for placeholders):
+   - `BETTER_AUTH_SECRET` – random 32+ character string used to sign tokens.
+   - `BETTER_AUTH_URL` – the public base URL for the API (e.g. `http://localhost:3000` in local dev).
+   - `RESEND_API_KEY` and `RESEND_FROM_EMAIL` – credentials + from address for transactional emails.
+   - `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` – OAuth credentials with the redirect URL `http://localhost:3000/api/auth/callback/google` (replace host/port if your API runs elsewhere).
+2. Configure your Resend domain/sender so the from address matches `RESEND_FROM_EMAIL`.
+3. When you tweak `apps/api/src/auth/better-auth.factory.ts` (adding providers, plugins, etc.) regenerate the Better Auth schema and re-run migrations (the CLI entry point lives at `apps/api/src/auth/auth.config.ts`):
+   ```bash
+   BETTER_AUTH_SECRET=dev BETTER_AUTH_URL=http://localhost:3000 \
+   RESEND_API_KEY=dev RESEND_FROM_EMAIL=dev@example.com \
+   GOOGLE_CLIENT_ID=dev GOOGLE_CLIENT_SECRET=dev \
+   DATABASE_URL=postgresql://app:app@localhost:5432/app \
+     npx @better-auth/cli@latest generate --config apps/api/src/auth/auth.config.ts --output packages/db/src/better-auth-schema.ts --yes
+
+   pnpm --filter @os/db generate
+   pnpm --filter @os/db migrate
+   ```
+4. Start the API (`pnpm --filter api dev`) and the Better Auth module will automatically serve every handler + guard Nest controllers by default.
+
 ## 🎯 Core Features (v1)
 
 - **World & Movement**: 2D tilemap with WASD controls, multiple rooms (Study, Build, Training)
