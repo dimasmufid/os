@@ -25,6 +25,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-socket.io": "^11.0.1",
+    "@nestjs/swagger": "^11.2.1",
     "@nestjs/websockets": "^11.0.1",
     "@os/db": "workspace:^",
     "@thallesp/nestjs-better-auth": "^2.1.0",
