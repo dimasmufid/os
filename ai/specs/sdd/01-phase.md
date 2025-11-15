@@ -14,6 +14,54 @@ This SDD is implementation-ready and can be assigned directly to engineers.
 
 ---
 
+## Implementation Checklist
+
+Working checklist mapped to the sections below. Update entries to `[x]` once delivered.
+
+### Section 2 — Core Emotional Loop
+- [ ] Tilemap-based Central Plaza with Study, Build, and Training rooms plus collision boundaries
+- [ ] WASD controls with smooth movement, idle animation, and directional sprite flipping
+- [ ] Focus Session flow (25m/50m/90m durations, fullscreen overlay, movement lock)
+- [ ] Reward distribution that applies XP/Gold formulas on successful sessions only
+- [ ] Hero HUD: portrait, level, XP bar, gold, streak indicator, and level-up banner animation
+- [ ] Cosmetic drop system (hat/outfit/accessory, rarity tiers, 10% drop rate, stored inventory unlock)
+- [ ] Inventory panel listing cosmetics with equip/unequip that updates hero sprite
+- [ ] World upgrade unlock logic (5/15/30 sessions) toggling decorative tile layers
+- [ ] HUD panels with floating buttons for Tasks, Inventory, History
+- [ ] Streak tracking with day counter and encouragement text
+
+### Section 5 — Drizzle Schema
+- [x] `hero_profiles` table storing hero stats/equipment bound to auth users
+- [x] `task_templates` table with per-user task definitions (name, category, default duration, room)
+- [x] `focus_sessions` table (task linkage, duration, timestamps, status, reward columns)
+- [x] `cosmetic_items` definitions plus `inventory_items` linking unlocked cosmetics to users
+- [x] `world_states` table capturing room levels, total successes, streak metadata
+
+### Section 6 — Backend Modules & APIs
+- [ ] Hero/Profile module providing `GET /profile` and hero mutation helpers
+- [ ] Task module with CRUD plus `GET /tasks`
+- [ ] Session module: `/sessions/start`, `/sessions/complete`, `/sessions/cancel`, `/sessions/history`
+- [ ] Inventory module: `GET /inventory` list + `/inventory/equip`
+- [ ] World module exposing world state read/upgrade operations
+- [ ] Reward service encapsulating XP/Gold formulas, streak progression, cosmetic drops, world upgrades
+- [ ] NestJS wiring for Drizzle/Postgres, DTO validation, and auth guards
+
+### Section 7 — Frontend Experience
+- [ ] `/world` TanStack route with HUD shell + Phaser canvas host
+- [ ] Phaser BootScene + WorldScene with hero movement, collisions, and room enter/leave events
+- [ ] React bridge for Phaser events plus TanStack Query hooks (profile, tasks, inventory, history)
+- [ ] `TopHUD`, `FloatingButtons`, `TasksPanel`, `InventoryPanel`, `HistoryPanel` components
+- [ ] `SessionOverlay` + `VictoryModal` surfaces with reward + cosmetic drop summaries
+- [ ] Session state lock (movement disabled) and resync after completion/cancel
+- [ ] Automatic refresh of profile, inventory, and world state after missions
+
+### Section 9 — Non-Functional Targets
+- [ ] Canvas boot < 2s and hero movement at 60fps
+- [ ] Secure reward validation (auth + backend-only formulas)
+- [ ] Guards against duplicate session completion submissions
+
+---
+
 # 2. Goal
 
 Build the **core emotional loop**:  

@@ -1,7 +1,7 @@
 import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import postgres, { type Sql } from "postgres";
 
-import * as schema from "./schema";
+import * as schema from "./schema.js";
 
 export type Database = PostgresJsDatabase<typeof schema>;
 
@@ -62,4 +62,4 @@ export const closeDb = async () => {
   }
 };
 
-export * as dbSchema from "./schema";
+export * as dbSchema from "./schema.js";
