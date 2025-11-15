@@ -5,5 +5,6 @@ import { HeroController } from './hero.controller';
 @Module({
   controllers: [HeroController],
   providers: [HeroService],
+  exports: [HeroService],
 })
 export class HeroModule {}

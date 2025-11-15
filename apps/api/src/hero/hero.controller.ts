@@ -1,34 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { HeroService } from './hero.service';
-import { CreateHeroDto } from './dto/create-hero.dto';
-import { UpdateHeroDto } from './dto/update-hero.dto';
+import { Body, Controller, Get, Headers, Patch, Post } from '@nestjs/common'
 
-@Controller('hero')
+import { CreateHeroDto } from './dto/create-hero.dto'
+import { UpdateHeroEquipmentDto } from './dto/update-hero.dto'
+import { HeroService } from './hero.service'
+
+@Controller('profile')
 export class HeroController {
   constructor(private readonly heroService: HeroService) {}
 
-  @Post()
-  create(@Body() createHeroDto: CreateHeroDto) {
-    return this.heroService.create(createHeroDto);
-  }
-
   @Get()
-  findAll() {
-    return this.heroService.findAll();
+  getProfile(@Headers('x-user-id') userId: string) {
+    return this.heroService.getProfile(userId)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.heroService.findOne(+id);
+  @Post('bootstrap')
+  bootstrapProfile(
+    @Headers('x-user-id') userId: string,
+    @Body() payload: CreateHeroDto,
+  ) {
+    return this.heroService.bootstrapHero(userId, payload)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateHeroDto: UpdateHeroDto) {
-    return this.heroService.update(+id, updateHeroDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.heroService.remove(+id);
+  @Patch('equipment')
+  updateEquipment(
+    @Headers('x-user-id') userId: string,
+    @Body() payload: UpdateHeroEquipmentDto,
+  ) {
+    return this.heroService.updateEquipment(userId, payload)
   }
 }

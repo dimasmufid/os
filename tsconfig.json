@@ -3,7 +3,11 @@
     "baseUrl": ".",
     "paths": {
       "@os/ui": ["packages/ui/src/index.ts"],
-      "@os/ui/*": ["packages/ui/src/*"]
+      "@os/ui/*": ["packages/ui/src/*"],
+      "@os/db": ["packages/db/src/index.ts"],
+      "@os/db/*": ["packages/db/src/*"],
+      "@os/types": ["packages/types/src/index.ts"],
+      "@os/types/*": ["packages/types/src/*"]
     }
   }
 }

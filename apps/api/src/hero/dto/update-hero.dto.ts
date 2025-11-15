@@ -1,4 +1,15 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateHeroDto } from './create-hero.dto';
+import { IsOptional, IsUUID } from 'class-validator'
 
-export class UpdateHeroDto extends PartialType(CreateHeroDto) {}
+export class UpdateHeroEquipmentDto {
+  @IsOptional()
+  @IsUUID()
+  hatId?: string | null
+
+  @IsOptional()
+  @IsUUID()
+  outfitId?: string | null
+
+  @IsOptional()
+  @IsUUID()
+  accessoryId?: string | null
+}

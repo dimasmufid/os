@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { SessionController } from './session.controller';
 import { SessionService } from './session.service';
 
@@ -8,7 +9,17 @@ describe('SessionController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SessionController],
-      providers: [SessionService],
+      providers: [
+        {
+          provide: SessionService,
+          useValue: {
+            start: jest.fn(),
+            complete: jest.fn(),
+            cancel: jest.fn(),
+            history: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     controller = module.get<SessionController>(SessionController);

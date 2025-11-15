@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { TaskService } from './task.service';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { Body, Controller, Delete, Get, Headers, Param, Patch, Post } from '@nestjs/common'
 
-@Controller('task')
+import { CreateTaskDto, UpdateTaskDto } from './dto/create-task.dto'
+import { TaskService } from './task.service'
+
+@Controller('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.taskService.create(createTaskDto);
-  }
-
   @Get()
-  findAll() {
-    return this.taskService.findAll();
+  list(@Headers('x-user-id') userId: string) {
+    return this.taskService.list(userId)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.findOne(+id);
+  @Post()
+  create(@Headers('x-user-id') userId: string, @Body() payload: CreateTaskDto) {
+    return this.taskService.create(userId, payload)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.taskService.update(+id, updateTaskDto);
+  @Patch(':taskId')
+  update(
+    @Headers('x-user-id') userId: string,
+    @Param('taskId') taskId: string,
+    @Body() payload: UpdateTaskDto,
+  ) {
+    return this.taskService.update(userId, taskId, payload)
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.taskService.remove(+id);
+  @Delete(':taskId')
+  remove(@Headers('x-user-id') userId: string, @Param('taskId') taskId: string) {
+    return this.taskService.remove(userId, taskId)
   }
 }

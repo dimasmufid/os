@@ -1,34 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { InventoryService } from './inventory.service';
-import { CreateInventoryDto } from './dto/create-inventory.dto';
-import { UpdateInventoryDto } from './dto/update-inventory.dto';
+import { Body, Controller, Get, Headers, Post } from '@nestjs/common'
+
+import { EquipInventoryDto } from './dto/create-inventory.dto'
+import { InventoryService } from './inventory.service'
 
 @Controller('inventory')
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}
 
-  @Post()
-  create(@Body() createInventoryDto: CreateInventoryDto) {
-    return this.inventoryService.create(createInventoryDto);
-  }
-
   @Get()
-  findAll() {
-    return this.inventoryService.findAll();
+  list(@Headers('x-user-id') userId: string) {
+    return this.inventoryService.list(userId)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.inventoryService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInventoryDto: UpdateInventoryDto) {
-    return this.inventoryService.update(+id, updateInventoryDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.inventoryService.remove(+id);
+  @Post('equip')
+  equip(@Headers('x-user-id') userId: string, @Body() payload: EquipInventoryDto) {
+    return this.inventoryService.equip(userId, payload)
   }
 }

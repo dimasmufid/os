@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
+import { DRIZZLE_CLIENT } from '../database/database.constants';
 import { HeroService } from './hero.service';
 
 describe('HeroService', () => {
@@ -6,7 +8,13 @@ describe('HeroService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [HeroService],
+      providers: [
+        HeroService,
+        {
+          provide: DRIZZLE_CLIENT,
+          useValue: {},
+        },
+      ],
     }).compile();
 
     service = module.get<HeroService>(HeroService);

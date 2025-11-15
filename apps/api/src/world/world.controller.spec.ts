@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { WorldController } from './world.controller';
 import { WorldService } from './world.service';
 
@@ -8,7 +9,14 @@ describe('WorldController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [WorldController],
-      providers: [WorldService],
+      providers: [
+        {
+          provide: WorldService,
+          useValue: {
+            getState: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     controller = module.get<WorldController>(WorldController);

@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SessionService } from './session.service';
-import { CreateSessionDto } from './dto/create-session.dto';
-import { UpdateSessionDto } from './dto/update-session.dto';
+import { Body, Controller, Get, Headers, Post } from '@nestjs/common'
 
-@Controller('session')
+import {
+  CancelSessionDto,
+  CompleteSessionDto,
+  StartSessionDto,
+} from './dto/create-session.dto'
+import { SessionService } from './session.service'
+
+@Controller('sessions')
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
-  @Post()
-  create(@Body() createSessionDto: CreateSessionDto) {
-    return this.sessionService.create(createSessionDto);
+  @Post('start')
+  start(@Headers('x-user-id') userId: string, @Body() payload: StartSessionDto) {
+    return this.sessionService.start(userId, payload)
   }
 
-  @Get()
-  findAll() {
-    return this.sessionService.findAll();
+  @Post('complete')
+  complete(@Headers('x-user-id') userId: string, @Body() payload: CompleteSessionDto) {
+    return this.sessionService.complete(userId, payload.sessionId)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sessionService.findOne(+id);
+  @Post('cancel')
+  cancel(@Headers('x-user-id') userId: string, @Body() payload: CancelSessionDto) {
+    return this.sessionService.cancel(userId, payload.sessionId)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSessionDto: UpdateSessionDto) {
-    return this.sessionService.update(+id, updateSessionDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sessionService.remove(+id);
+  @Get('history')
+  history(@Headers('x-user-id') userId: string) {
+    return this.sessionService.history(userId)
   }
 }
