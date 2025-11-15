@@ -1,4 +1,4 @@
-# Nesra Town — Product Requirements Document (PRD)
+# OS — Product Requirements Document (PRD)
 Version: 1.0  
 Owner: Dimas  
 Status: Draft  
@@ -9,7 +9,7 @@ Last Updated: 2025-11-15
 # 1. Overview
 
 ## 1.1 Product Summary
-Nesra Town is a **gameified productivity world** designed to help users focus, execute deep work, and build consistent habits. Instead of traditional todo apps, users enter a **2D virtual town** (similar to GatherTown and cozy RPG environments). Their **real-life productivity sessions** directly upgrade their avatar, unlock cosmetics, and expand the world.
+OS is a **gameified productivity world** designed to help users focus, execute deep work, and build consistent habits. Instead of traditional todo apps, users enter a **2D virtual town** (similar to GatherTown and cozy RPG environments). Their **real-life productivity sessions** directly upgrade their avatar, unlock cosmetics, and expand the world.
 
 This document provides a clear overview for engineering, design, and product teams.
 

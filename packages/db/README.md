@@ -1,4 +1,4 @@
-# @nesra-town/db
+# @os/db
 
 Shared database schema and migrations using Drizzle ORM.
 
@@ -18,8 +18,8 @@ Shared database schema and migrations using Drizzle ORM.
    ```
 4. Generate & apply migrations after editing `src/schema.ts`:
    ```bash
-   pnpm --filter @nesra-town/db generate
-   pnpm --filter @nesra-town/db migrate
+   pnpm --filter @os/db generate
+   pnpm --filter @os/db migrate
    ```
 
 Docker Compose reads `.env.postgres`, so remember to rerun `pnpm db:env` whenever `DATABASE_URL` changes.
@@ -35,13 +35,13 @@ Docker Compose reads `.env.postgres`, so remember to rerun `pnpm db:env` wheneve
 Import the schema in your apps:
 
 ```typescript
-import { users } from "@nesra-town/db";
+import { users } from "@os/db";
 ```
 
 The package also ships a lazy Postgres client helper you can reuse in services:
 
 ```typescript
-import { getDb } from "@nesra-town/db";
+import { getDb } from "@os/db";
 
 const db = getDb(); // reads DATABASE_URL from process.env
 ```

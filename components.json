@@ -11,11 +11,11 @@
     "prefix": ""
   },
   "aliases": {
-    "components": "@nesra-town/ui/components",
-    "utils": "@nesra-town/ui/lib/utils",
-    "ui": "@nesra-town/ui/components/ui",
-    "lib": "@nesra-town/ui/lib",
-    "hooks": "@nesra-town/ui/hooks"
+    "components": "@os/ui/components",
+    "utils": "@os/ui/lib/utils",
+    "ui": "@os/ui/components/ui",
+    "lib": "@os/ui/lib",
+    "hooks": "@os/ui/hooks"
   },
   "iconLibrary": "lucide"
 }

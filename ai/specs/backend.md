@@ -1,9 +1,9 @@
-# Nesra Town – Backend Specification
+# OS – Backend Specification
 
 Version: 0.3 (2025-01-11)  
 Owner: Platform Engineering  
 Status: Draft → Ready for development  
-Document Goal: Provide a single source of truth for implementing the Nesra Town backend, whether it runs as **Next.js API routes** or the standalone **FastAPI service**. Both runtime options must expose the same modules, database schema, business logic, and HTTP contracts.
+Document Goal: Provide a single source of truth for implementing the OS backend, whether it runs as **Next.js API routes** or the standalone **FastAPI service**. Both runtime options must expose the same modules, database schema, business logic, and HTTP contracts.
 
 ---
 
@@ -555,4 +555,4 @@ All jobs should log to structured logger and expose metrics counters.
 
 ---
 
-This specification now contains all information necessary for engineers to implement and maintain the Nesra Town backend consistently across runtimes. Keep it updated whenever contracts or rules change.
+This specification now contains all information necessary for engineers to implement and maintain the OS backend consistently across runtimes. Keep it updated whenever contracts or rules change.

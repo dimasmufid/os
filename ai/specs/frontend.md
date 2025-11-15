@@ -1,4 +1,4 @@
-# Nesra Town – Frontend (Next.js + Phaser) Specification
+# OS – Frontend (Next.js + Phaser) Specification
 
 Version: 0.2  
 Status: Ready for implementation  
@@ -7,7 +7,7 @@ Last Updated: 2025-11-15
 ---
 
 ## 1. Purpose & Scope
-This specification defines the **Next.js + Phaser frontend** for Nesra Town. It translates the PRD and backend contract into concrete UI/game architecture, state flows, and implementation details so engineers can ship an end-to-end playable experience with predictable upgrades.
+This specification defines the **Next.js + Phaser frontend** for OS. It translates the PRD and backend contract into concrete UI/game architecture, state flows, and implementation details so engineers can ship an end-to-end playable experience with predictable upgrades.
 
 Key responsibilities:
 - Render the 2D world, avatar movement, and room progression.
@@ -507,4 +507,4 @@ These should not block v1 but keep placeholders (feature flags).
 - [ ] World upgrades toggle layers.
 - [ ] Tests implemented per strategy.
 
-This spec, combined with the backend contract and PRD, is sufficient to start implementing the Nesra Town frontend.
+This spec, combined with the backend contract and PRD, is sufficient to start implementing the OS frontend.

@@ -5,7 +5,7 @@ This project uses [Turborepo](https://turbo.build/) as a monorepo build system.
 ## Project Structure
 
 ```
-/nesra-town
+/os
   /apps
     /web        # TanStack Start (Phaser frontend)
     /api        # NestJS backend
@@ -53,7 +53,7 @@ This project uses [Turborepo](https://turbo.build/) as a monorepo build system.
 ### Filtered Commands
 - `pnpm turbo dev --filter=web` - Run only web app
 - `pnpm turbo dev --filter=api` - Run only API
-- `pnpm turbo build --filter=@nesra-town/db` - Build only db package
+- `pnpm turbo build --filter=@os/db` - Build only db package
 
 ## Using Shared Packages
 
@@ -64,9 +64,9 @@ Add the package as a dependency:
 ```json
 {
   "dependencies": {
-    "@nesra-town/db": "workspace:*",
-    "@nesra-town/types": "workspace:*",
-    "@nesra-town/ui": "workspace:*"
+    "@os/db": "workspace:*",
+    "@os/types": "workspace:*",
+    "@os/ui": "workspace:*"
   }
 }
 ```
@@ -75,13 +75,13 @@ Then import:
 
 ```typescript
 // Types
-import { Hero, Session } from "@nesra-town/types";
+import { Hero, Session } from "@os/types";
 
 // Database schema
-import { users } from "@nesra-town/db";
+import { users } from "@os/db";
 
 // UI components
-import { Button } from "@nesra-town/ui";
+import { Button } from "@os/ui";
 ```
 
 ## Deployment

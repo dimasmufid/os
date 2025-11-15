@@ -111,7 +111,7 @@ importers:
       '@faker-js/faker':
         specifier: ^10.0.0
         version: 10.1.0
-      '@nesra-town/ui':
+      '@os/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       '@radix-ui/react-label':

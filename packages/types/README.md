@@ -1,4 +1,4 @@
-# @nesra-town/types
+# @os/types
 
 Shared TypeScript types used across the monorepo.
 
@@ -7,6 +7,6 @@ Shared TypeScript types used across the monorepo.
 Import types in your apps:
 
 ```typescript
-import { Hero, Session, WorldState } from "@nesra-town/types";
+import { Hero, Session, WorldState } from "@os/types";
 ```
 

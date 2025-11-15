@@ -1,4 +1,4 @@
-# @nesra-town/ui
+# @os/ui
 
 Shared UI components used across the monorepo.
 
@@ -7,7 +7,7 @@ Shared UI components used across the monorepo.
 Import components in your apps:
 
 ```typescript
-import { Button } from "@nesra-town/ui";
+import { Button } from "@os/ui";
 ```
 
 ## Development

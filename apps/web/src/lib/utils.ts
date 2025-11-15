@@ -1,1 +1,1 @@
-export { cn } from '@nesra-town/ui/lib/utils'
+export { cn } from '@os/ui/lib/utils'

@@ -11,7 +11,7 @@ PNPM and Turbo manage this monorepo. `apps/web` hosts the TanStack Start fronten
 - `pnpm test` – orchestrate Vitest and Jest suites  
 - `pnpm --filter web dev` – start the frontend dev server  
 - `pnpm --filter api start:dev` – run the NestJS dev server  
-- `pnpm --filter @nesra-town/db migrate` – execute Drizzle migrations  
+- `pnpm --filter @os/db migrate` – execute Drizzle migrations  
 
 ## Coding Style & Naming Conventions
 All code is TypeScript-first and strict ESM. Prettier (single quotes, trailing commas) plus ESLint define formatting—enable format-on-save. Use two-space indentation, PascalCase React components, camelCase helpers/hooks, and kebab-case route folders. Group Nest controllers/services/modules inside domain folders (`sessions/sessions.service.ts`). Export shared interfaces from `packages/types`, colocate reusable UI in `packages/ui/src/components/<Component>/`, and manage schema or SQL changes exclusively through `packages/db`.

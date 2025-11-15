@@ -7,8 +7,8 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@nesra-town/ui": ["./src/index.ts"],
-      "@nesra-town/ui/*": ["./src/*"]
+      "@os/ui": ["./src/index.ts"],
+      "@os/ui/*": ["./src/*"]
     },
     "strict": true,
     "esModuleInterop": true,

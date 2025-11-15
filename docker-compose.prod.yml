@@ -4,91 +4,81 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile.web
-      target: production
+      dockerfile: apps/web/Dockerfile
     container_name: nesra_web
     restart: unless-stopped
     env_file:
-      - ./apps/web/.env.production
+      - .env.prod
     environment:
-      # API base URL from inside the docker network
-      NEXT_PUBLIC_API_BASE_URL: http://api:4000
+      NODE_ENV: production
+      # Point frontend to internal API URL
+      API_BASE_URL: http://api:4000
     depends_on:
       - api
-    ports:
-      - "3000:3000"
     networks:
-      - app_net
+      - app-network
+    ports:
+      - "3000:3000" # expose if you want to hit directly; Dokploy can map this
 
   api:
     build:
       context: .
-      dockerfile: Dockerfile.api
-      target: production
+      dockerfile: apps/api/Dockerfile
     container_name: nesra_api
     restart: unless-stopped
     env_file:
-      - ./apps/api/.env.production
+      - .env.prod
     environment:
-      # Remote Postgres (prod DB), no local Postgres container
+      NODE_ENV: production
+      PORT: 4000
+      # remote Postgres (NOT in this compose)
       DATABASE_URL: ${DATABASE_URL}
-
-      # Redis & MinIO inside the docker network
+      # internal services
       REDIS_URL: redis://redis:6379
-
       MINIO_ENDPOINT: http://minio:9000
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-nesra}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-super-secret}
-      MINIO_BUCKET: ${MINIO_BUCKET:-nesra-town}
-
-      # For WebSocket / CORS config if needed
-      API_PUBLIC_URL: ${API_PUBLIC_URL:-https://api.yourdomain.com}
-      WEB_PUBLIC_URL: ${WEB_PUBLIC_URL:-https://app.yourdomain.com}
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
     depends_on:
       - redis
       - minio
-    ports:
-      - "4000:4000" # HTTP + WS
     networks:
-      - app_net
+      - app-network
+    ports:
+      - "4000:4000"
 
   redis:
     image: redis:7-alpine
     container_name: nesra_redis
     restart: unless-stopped
-    command: >
-      redis-server --save 60 1 --loglevel warning
-    ports:
-      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
     volumes:
       - redis_data:/data
     networks:
-      - app_net
+      - app-network
 
   minio:
     image: minio/minio:latest
     container_name: nesra_minio
     restart: unless-stopped
-    ports:
-      - "9000:9000" # S3 API
-      - "9001:9001" # Console
     env_file:
-      - ./.env.minio # optional, or use env below
+      - .env.prod
     environment:
-      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-nesra}
-      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-super-secret}
-      # Optional but recommended when you put MinIO behind a domain:
-      # MINIO_SERVER_URL: ${MINIO_SERVER_URL:-https://storage.yourdomain.com}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_SERVER_URL: ${MINIO_SERVER_URL}
+    command: server /data --console-address ":9001"
     volumes:
       - minio_data:/data
-    command: server /data --console-address ":9001"
     networks:
-      - app_net
+      - app-network
+    ports:
+      - "9000:9000"  # S3 API
+      - "9001:9001"  # MinIO console
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   redis_data:
   minio_data:
-
-networks:
-  app_net:
-    driver: bridge

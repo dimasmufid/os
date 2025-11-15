@@ -1,10 +1,10 @@
-# Nesra Town
+# OS
 
 A **gamified productivity world** that helps users focus, execute deep work, and build consistent habits through an immersive 2D virtual town experience.
 
 ## 🎮 Overview
 
-Nesra Town transforms productivity into an engaging game experience. Instead of traditional todo apps, users enter a **2D virtual town** (similar to GatherTown and cozy RPG environments) where their **real-life productivity sessions** directly upgrade their avatar, unlock cosmetics, and expand the world.
+OS transforms productivity into an engaging game experience. Instead of traditional todo apps, users enter a **2D virtual town** (similar to GatherTown and cozy RPG environments) where their **real-life productivity sessions** directly upgrade their avatar, unlock cosmetics, and expand the world.
 
 ### Product Vision
 
@@ -165,12 +165,12 @@ docker-compose down
    ```
 4. Generate SQL snapshots from the Drizzle schema and push them to the database:
    ```bash
-   pnpm --filter @nesra-town/db generate
-   pnpm --filter @nesra-town/db migrate
+   pnpm --filter @os/db generate
+   pnpm --filter @os/db migrate
    ```
 5. Inspect the database with Drizzle Studio whenever you need to debug data:
    ```bash
-   pnpm --filter @nesra-town/db studio
+   pnpm --filter @os/db studio
    ```
 
 Run `pnpm db:env` whenever the `DATABASE_URL` changes so `.env.postgres` stays in sync. Both files are gitignored to keep secrets local.
