@@ -5,7 +5,7 @@ description = "A template for kickstarting new FastAPI projects"
 authors = ["zhanymkanov"]
 readme = "README.md"
 license = "UNLICENSED"
-package_mode = false
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -23,6 +23,7 @@ fastapi-users = "^15.0.1"
 fastapi-users-db-sqlalchemy = "^7.0.0"
 httpx-oauth = "^0.16.1"
 google-auth = "^2.43.0"
+requests = "^2.31.0"
 itsdangerous = "^2.2.0"
 
 [tool.poetry.group.dev.dependencies]

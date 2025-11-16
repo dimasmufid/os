@@ -1,7 +1,8 @@
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import PostgresDsn, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import AnyHttpUrl
 
 from src.constants import Environment
 
@@ -28,6 +29,24 @@ class Config(CustomBaseSettings):
     CORS_HEADERS: list[str] = ["*"]
 
     APP_VERSION: str = "0.1"
+    AUTH_JWT_SECRET: str = "dev-secret"
+    AUTH_ACCESS_TOKEN_TTL_MIN: int = 15
+    AUTH_REFRESH_TTL_DAYS: int = 30
+    AUTH_COOKIE_DOMAIN: str | None = None
+    AUTH_COOKIE_SECURE: bool = True
+    AUTH_COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "lax"
+    AUTH_COOKIE_ACCESS_NAME: str = "access_token"
+    AUTH_COOKIE_REFRESH_NAME: str = "refresh_token"
+    OAUTH_GOOGLE_CLIENT_ID: str | None = None
+    OAUTH_GOOGLE_CLIENT_SECRET: str | None = None
+    OAUTH_GOOGLE_REDIRECT_URI: AnyHttpUrl | None = None
+    APP_BASE_URL: AnyHttpUrl | None = None
+    
+    SMTP_HOST: str | None = None
+    SMTP_PORT: int = 587
+    SMTP_USER: str | None = None
+    SMTP_PASS: str | None = None
+    EMAIL_FROM: str | None = None
 
     @model_validator(mode="after")
     def validate_sentry_non_local(self) -> "Config":

@@ -1,3 +1,4 @@
+from collections.abc import AsyncGenerator
 from typing import Any
 
 from sqlalchemy import (
@@ -7,7 +8,13 @@ from sqlalchemy import (
     Select,
     Update,
 )
-from sqlalchemy.ext.asyncio import AsyncConnection, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncConnection,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+from sqlalchemy.orm import DeclarativeBase
 
 from src.config import settings
 from src.constants import DB_NAMING_CONVENTION
@@ -21,6 +28,14 @@ engine = create_async_engine(
     pool_pre_ping=settings.DATABASE_POOL_PRE_PING,
 )
 metadata = MetaData(naming_convention=DB_NAMING_CONVENTION)
+async_session_factory = async_sessionmaker(
+    bind=engine,
+    expire_on_commit=False,
+)
+
+
+class Base(DeclarativeBase):
+    metadata = metadata
 
 
 async def fetch_one(
@@ -55,13 +70,14 @@ async def execute(
     query: Insert | Update,
     connection: AsyncConnection = None,
     commit_after: bool = False,
-) -> None:
+) -> CursorResult:
     if not connection:
         async with engine.connect() as connection:
-            await _execute_query(query, connection, commit_after)
-            return
+            cursor = await _execute_query(query, connection, commit_after)
+            return cursor
 
-    await _execute_query(query, connection, commit_after)
+    cursor = await _execute_query(query, connection, commit_after)
+    return cursor
 
 
 async def _execute_query(
@@ -82,3 +98,8 @@ async def get_db_connection() -> AsyncConnection:
         yield connection
     finally:
         await connection.close()
+
+
+async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
+    async with async_session_factory() as session:
+        yield session
