@@ -30,11 +30,7 @@ interface LoginFormProps extends React.ComponentProps<"form"> {
   onSuccess?: () => void;
 }
 
-export function LoginForm({
-  className,
-  onSuccess,
-  ...props
-}: LoginFormProps) {
+export function LoginForm({ className, onSuccess, ...props }: LoginFormProps) {
   const router = useRouter();
   const { signin, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -179,7 +175,7 @@ export function LoginForm({
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push("/overall");
+        router.push("/world");
       }
     } catch {
       setIsLoading(false);
@@ -193,7 +189,7 @@ export function LoginForm({
     if (onSuccess) {
       onSuccess();
     } else {
-      router.push("/overall");
+      router.push("/world");
     }
   };
   return (

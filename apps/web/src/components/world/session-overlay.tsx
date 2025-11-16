@@ -31,16 +31,16 @@ export function SessionOverlay({
   const ready = remainingSeconds <= 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-lg">
-      <div className="w-full max-w-2xl rounded-3xl border border-white/10 bg-slate-900/90 p-10 text-center text-slate-100 shadow-2xl shadow-slate-900/70">
-        <p className="text-sm uppercase tracking-widest text-slate-400">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-lg">
+      <div className="w-full max-w-2xl rounded-3xl border border-border bg-card/90 p-10 text-center text-foreground shadow-2xl">
+        <p className="text-sm uppercase tracking-widest text-muted-foreground">
           Session Running
         </p>
-        <h2 className="mt-2 text-5xl font-semibold text-slate-50">
+        <h2 className="mt-2 text-5xl font-semibold text-foreground">
           {String(minutes).padStart(2, "0")}:
           {String(seconds).padStart(2, "0")}
         </h2>
-        <p className="mt-3 text-base text-slate-200">
+        <p className="mt-3 text-base text-foreground">
           {encouragements[session.session_id.length % encouragements.length]}
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
@@ -48,14 +48,14 @@ export function SessionOverlay({
             onClick={onCancel}
             disabled={isCancelling || isCompleting}
             variant="ghost"
-            className="rounded-2xl border border-white/10 bg-slate-800/60 text-slate-100"
+            className="rounded-2xl border border-border bg-card/60 text-foreground"
           >
             {isCancelling ? "Cancelling..." : "Cancel Session"}
           </Button>
           <Button
             onClick={onComplete}
             disabled={!ready || isCompleting}
-            className="rounded-2xl bg-gradient-to-r from-emerald-500 to-sky-500 px-6 text-lg font-semibold"
+            className="rounded-2xl bg-gradient-to-r from-primary to-primary px-6 text-lg font-semibold"
           >
             {ready
               ? isCompleting

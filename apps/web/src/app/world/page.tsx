@@ -231,11 +231,11 @@ export default function WorldPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 p-4 text-slate-50 md:p-8">
+    <div className="min-h-screen bg-background p-4 text-foreground md:p-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
         <TopHUD hero={hero} world={world} />
         <div className="grid gap-6 lg:grid-cols-[2.2fr_1fr]">
-          <div className="min-h-[520px] rounded-3xl border border-white/10 bg-slate-900/80 p-4 shadow-xl shadow-slate-900/40">
+          <div className="min-h-[520px] rounded-3xl border border-border bg-card/80 p-4 shadow-xl">
             <GameCanvas
               heroSignature={heroSignature}
               movementLocked={Boolean(runningSession)}

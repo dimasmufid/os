@@ -17,32 +17,32 @@ export function TopHUD({ hero, world }: TopHUDProps) {
       : 0;
 
   return (
-    <Card className="flex w-full flex-col gap-4 rounded-3xl border border-white/10 bg-slate-900/70 p-6 shadow-lg shadow-slate-900/30">
+    <Card className="flex w-full flex-col gap-4 rounded-3xl border border-border bg-card/70 p-6 shadow-lg">
       <div className="flex items-center gap-4">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-600/60 bg-slate-800 text-2xl font-semibold text-blue-200">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-card text-2xl font-semibold text-primary">
           {hero?.level ?? 1}
         </div>
         <div className="flex flex-1 flex-col gap-2">
-          <div className="flex items-center justify-between text-sm font-medium text-blue-100">
+          <div className="flex items-center justify-between text-sm font-medium text-primary">
             <span>Level {hero?.level ?? 1}</span>
             <span>
               {hero?.exp ?? 0} / {hero?.exp_to_next ?? 100} XP
             </span>
           </div>
-          <div className="relative h-2 w-full overflow-hidden rounded-full bg-slate-700">
+          <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
             <div
-              className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 transition-all"
+              className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-primary via-primary to-primary transition-all"
               style={{ width: `${xpProgress}%` }}
             />
           </div>
         </div>
       </div>
-      <div className="grid gap-3 text-sm text-blue-50 md:grid-cols-3">
+      <div className="grid gap-3 text-sm text-primary md:grid-cols-3">
         <StatBubble
           label="Gold"
           value={`${hero?.gold ?? 0}g`}
           description="Earned from missions"
-          icon={<Coins className="h-4 w-4 text-amber-300" />}
+          icon={<Coins className="h-4 w-4 text-primary" />}
         />
         <StatBubble
           label="Focus Streak"
@@ -52,13 +52,13 @@ export function TopHUD({ hero, world }: TopHUDProps) {
               ? "Keep the streak alive!"
               : "Start a streak today"
           }
-          icon={<Flame className="h-4 w-4 text-orange-300" />}
+          icon={<Flame className="h-4 w-4 text-primary" />}
         />
         <StatBubble
           label="Total Successes"
           value={world?.total_sessions_success ?? 0}
           description={`${world?.longest_streak ?? 0} day best`}
-          icon={<Star className="h-4 w-4 text-yellow-300" />}
+          icon={<Star className="h-4 w-4 text-primary" />}
         />
       </div>
     </Card>
@@ -74,17 +74,17 @@ interface StatBubbleProps {
 
 function StatBubble({ label, value, description, icon }: StatBubbleProps) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-slate-800/80 p-3">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-slate-900/60 text-base font-semibold text-slate-100">
+    <div className="flex items-center gap-3 rounded-2xl bg-card/80 p-3">
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card/60 text-base font-semibold text-foreground">
         {icon ?? value}
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wide text-slate-400">
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">
           {label}
         </p>
-        <p className="text-base font-semibold text-slate-50">{value}</p>
+        <p className="text-base font-semibold text-foreground">{value}</p>
         {description && (
-          <p className="text-xs text-slate-400">{description}</p>
+          <p className="text-xs text-muted-foreground">{description}</p>
         )}
       </div>
     </div>

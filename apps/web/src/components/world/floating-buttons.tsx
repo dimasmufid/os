@@ -22,15 +22,15 @@ export function FloatingButtons({
   onToggle,
 }: FloatingButtonsProps) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-slate-900/80 p-3 shadow-lg shadow-slate-900/30">
+    <div className="flex items-center gap-3 rounded-2xl bg-card/80 p-3 shadow-lg">
       {buttons.map(({ key, label, icon: Icon }) => (
         <Button
           key={key}
           variant={activePanel === key ? "default" : "ghost"}
-          className={`flex-1 rounded-xl border border-white/5 ${
+          className={`flex-1 rounded-xl border border-border ${
             activePanel === key
-              ? "bg-gradient-to-r from-sky-500 to-blue-600 text-white"
-              : "text-slate-200"
+              ? "bg-gradient-to-r from-primary to-primary text-primary-foreground"
+              : "text-foreground"
           }`}
           onClick={() => onToggle(activePanel === key ? null : key)}
         >

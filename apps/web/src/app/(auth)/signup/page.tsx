@@ -11,7 +11,7 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.replace("/overall");
+      router.replace("/world");
     }
   }, [isAuthenticated, isLoading, router]);
 

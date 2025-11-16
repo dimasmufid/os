@@ -79,12 +79,12 @@ export function TasksPanel({
   };
 
   return (
-    <Card className="w-full rounded-3xl border border-white/10 bg-slate-900/80 p-6 text-slate-100 shadow-lg shadow-slate-900/40">
+    <Card className="w-full rounded-3xl border border-border bg-card/80 p-6 text-foreground shadow-lg">
       <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between text-sm text-slate-300">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
           <span>
             Current room:{" "}
-            <strong className="text-slate-100">
+            <strong className="text-foreground">
               {currentRoom ? currentRoom.toUpperCase() : "Plaza"}
             </strong>
           </span>
@@ -100,19 +100,19 @@ export function TasksPanel({
                 onClick={() => onSelectTask(isSelected ? null : task.id)}
                 className={`flex w-full items-start justify-between rounded-2xl border p-4 text-left transition-colors ${
                   isSelected
-                    ? "border-sky-400 bg-sky-500/10"
-                    : "border-white/10 bg-slate-800/60 hover:border-sky-400/40"
+                    ? "border-primary bg-primary/10"
+                    : "border-border bg-card/60 hover:border-primary/40"
                 }`}
               >
                 <div>
-                  <p className="text-base font-semibold leading-tight text-slate-50">
+                  <p className="text-base font-semibold leading-tight text-foreground">
                     {task.name}
                   </p>
-                  <p className="text-xs uppercase tracking-wide text-slate-400">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
                     {task.room} • {task.default_duration}m
                   </p>
                   {task.category && (
-                    <p className="text-xs text-slate-400">{task.category}</p>
+                    <p className="text-xs text-muted-foreground">{task.category}</p>
                   )}
                 </div>
                 <button
@@ -121,7 +121,7 @@ export function TasksPanel({
                     event.stopPropagation();
                     void onDeleteTask(task.id);
                   }}
-                  className="text-slate-400 hover:text-rose-400"
+                  className="text-muted-foreground hover:text-destructive"
                   aria-label="Delete task"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -130,13 +130,13 @@ export function TasksPanel({
             );
           })}
           {!tasks?.length && (
-            <div className="rounded-2xl border border-dashed border-white/10 p-4 text-sm text-slate-400">
+            <div className="rounded-2xl border border-dashed border-border p-4 text-sm text-muted-foreground">
               No missions yet. Create one below to get started.
             </div>
           )}
         </div>
         <div>
-          <p className="text-sm font-semibold text-slate-200">Duration</p>
+          <p className="text-sm font-semibold text-foreground">Duration</p>
           <div className="mt-2 flex gap-2">
             {[25, 50, 90].map((duration) => (
               <Button
@@ -144,8 +144,8 @@ export function TasksPanel({
                 variant={selectedDuration === duration ? "default" : "ghost"}
                 className={`rounded-2xl ${
                   selectedDuration === duration
-                    ? "bg-gradient-to-r from-sky-500 to-blue-600"
-                    : "border border-white/10 bg-slate-800/40 text-slate-200"
+                    ? "bg-gradient-to-r from-primary to-primary"
+                    : "border border-border bg-card/40 text-foreground"
                 }`}
                 onClick={() => onDurationChange(duration as 25 | 50 | 90)}
               >
@@ -155,15 +155,15 @@ export function TasksPanel({
           </div>
         </div>
         <Button
-          className="rounded-2xl bg-gradient-to-r from-emerald-500 to-sky-500 text-base font-semibold"
+          className="rounded-2xl bg-gradient-to-r from-primary to-primary text-base font-semibold"
           disabled={isStarting}
           onClick={onStartMission}
         >
           {isStarting ? "Starting..." : "Start Mission"}
         </Button>
       </div>
-      <div className="mt-6 rounded-2xl border border-white/10 bg-slate-900/60 p-4">
-        <p className="text-sm font-semibold text-slate-200">Add New Task</p>
+      <div className="mt-6 rounded-2xl border border-border bg-card/60 p-4">
+        <p className="text-sm font-semibold text-foreground">Add New Task</p>
         <div className="mt-3 grid gap-3 md:grid-cols-2">
           <Input
             placeholder="Task name"
@@ -171,7 +171,7 @@ export function TasksPanel({
             onChange={(event) =>
               setFormState((prev) => ({ ...prev, name: event.target.value }))
             }
-            className="rounded-2xl bg-slate-900/70"
+            className="rounded-2xl bg-card/70"
           />
           <Input
             placeholder="Category (optional)"
@@ -182,10 +182,10 @@ export function TasksPanel({
                 category: event.target.value,
               }))
             }
-            className="rounded-2xl bg-slate-900/70"
+            className="rounded-2xl bg-card/70"
           />
           <select
-            className="rounded-2xl border border-white/10 bg-slate-900/70 px-3 py-2 text-sm text-slate-100"
+            className="rounded-2xl border border-border bg-card/70 px-3 py-2 text-sm text-foreground"
             value={formState.room}
             onChange={(event) =>
               setFormState((prev) => ({
@@ -199,7 +199,7 @@ export function TasksPanel({
             <option value="training">Training Room</option>
           </select>
           <select
-            className="rounded-2xl border border-white/10 bg-slate-900/70 px-3 py-2 text-sm text-slate-100"
+            className="rounded-2xl border border-border bg-card/70 px-3 py-2 text-sm text-foreground"
             value={formState.default_duration}
             onChange={(event) =>
               setFormState((prev) => ({
@@ -216,7 +216,7 @@ export function TasksPanel({
         <Button
           onClick={handleCreate}
           disabled={creatingTask}
-          className="mt-3 w-full rounded-2xl border border-white/10 bg-slate-800/70 text-sm"
+          className="mt-3 w-full rounded-2xl border border-border bg-card/70 text-sm"
           variant="ghost"
         >
           {creatingTask ? "Saving..." : "Save Task"}

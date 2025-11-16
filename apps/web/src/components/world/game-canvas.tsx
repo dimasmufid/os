@@ -282,7 +282,7 @@ export function GameCanvas({
   return (
     <div
       ref={containerRef}
-      className="h-full w-full overflow-hidden rounded-3xl border border-white/10 bg-slate-900"
+      className="h-full w-full overflow-hidden rounded-3xl border border-border bg-card"
     />
   );
 }
