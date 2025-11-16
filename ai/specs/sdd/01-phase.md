@@ -21,50 +21,50 @@ Working checklist mapped to the sections below. Update entries to `[ ]` once del
 
 ### Section 2 — Core Emotional Loop
 
-- [ ] Tilemap-based Central Plaza with Study, Build, and Training rooms plus collision boundaries
-- [ ] WASD controls with smooth movement, idle animation, and directional sprite flipping
-- [ ] Focus Session flow (25m/50m/90m durations, fullscreen overlay, movement lock)
-- [ ] Reward distribution that applies XP/Gold formulas on successful sessions only
-- [ ] Hero HUD: portrait, level, XP bar, gold, streak indicator, and level-up banner animation
-- [ ] Cosmetic drop system (hat/outfit/accessory, rarity tiers, 10% drop rate, stored inventory unlock)
-- [ ] Inventory panel listing cosmetics with equip/unequip that updates hero sprite
-- [ ] World upgrade unlock logic (5/15/30 sessions) toggling decorative tile layers
-- [ ] HUD panels with floating buttons for Tasks, Inventory, History
-- [ ] Streak tracking with day counter and encouragement text
+- [x] Tilemap-based Central Plaza with Study, Build, and Training rooms plus collision boundaries
+- [x] WASD controls with smooth movement, idle animation, and directional sprite flipping
+- [x] Focus Session flow (25m/50m/90m durations, fullscreen overlay, movement lock)
+- [x] Reward distribution that applies XP/Gold formulas on successful sessions only
+- [x] Hero HUD: portrait, level, XP bar, gold, streak indicator, and level-up banner animation
+- [x] Cosmetic drop system (hat/outfit/accessory, rarity tiers, 10% drop rate, stored inventory unlock)
+- [x] Inventory panel listing cosmetics with equip/unequip that updates hero sprite
+- [x] World upgrade unlock logic (5/15/30 sessions) toggling decorative tile layers
+- [x] HUD panels with floating buttons for Tasks, Inventory, History
+- [x] Streak tracking with day counter and encouragement text
 
 ### Section 5 — SQLAlchemy Schema
 
-- [ ] `hero_profiles` table storing hero stats/equipment bound to auth users
-- [ ] `task_templates` table with per-user task definitions (name, category, default duration, room)
-- [ ] `focus_sessions` table (task linkage, duration, timestamps, status, reward columns)
-- [ ] `cosmetic_items` definitions plus `inventory_items` linking unlocked cosmetics to users
-- [ ] `world_states` table capturing room levels, total successes, streak metadata
+- [x] `hero_profiles` table storing hero stats/equipment bound to auth users
+- [x] `task_templates` table with per-user task definitions (name, category, default duration, room)
+- [x] `focus_sessions` table (task linkage, duration, timestamps, status, reward columns)
+- [x] `cosmetic_items` definitions plus `inventory_items` linking unlocked cosmetics to users
+- [x] `world_states` table capturing room levels, total successes, streak metadata
 
 ### Section 6 — Backend Modules & APIs
 
-- [ ] Hero/Profile module providing `GET /profile` and hero mutation helpers
-- [ ] Task module with CRUD plus `GET /tasks`
-- [ ] Session module: `/sessions/start`, `/sessions/complete`, `/sessions/cancel`, `/sessions/history`
-- [ ] Inventory module: `GET /inventory` list + `/inventory/equip`
-- [ ] World module exposing world state read/upgrade operations
-- [ ] Reward service encapsulating XP/Gold formulas, streak progression, cosmetic drops, world upgrades
-- [ ] FastAPI wiring for SQLAlchemy/Postgres, Pydantic validation, and FastAPI-Users auth guards
+- [x] Hero/Profile module providing `GET /profile` and hero mutation helpers
+- [x] Task module with CRUD plus `GET /tasks`
+- [x] Session module: `/sessions/start`, `/sessions/complete`, `/sessions/cancel`, `/sessions/history`
+- [x] Inventory module: `GET /inventory` list + `/inventory/equip`
+- [x] World module exposing world state read/upgrade operations
+- [x] Reward service encapsulating XP/Gold formulas, streak progression, cosmetic drops, world upgrades
+- [x] FastAPI wiring for SQLAlchemy/Postgres, Pydantic validation, and FastAPI-Users auth guards
 
 ### Section 7 — Frontend Experience
 
-- [ ] `/world` Next.js route with HUD shell + Phaser canvas host
-- [ ] Phaser BootScene + WorldScene with hero movement, collisions, and room enter/leave events
-- [ ] React bridge for Phaser events plus React Query hooks (profile, tasks, inventory, history)
-- [ ] `TopHUD`, `FloatingButtons`, `TasksPanel`, `InventoryPanel`, `HistoryPanel` components
-- [ ] `SessionOverlay` + `VictoryModal` surfaces with reward + cosmetic drop summaries
-- [ ] Session state lock (movement disabled) and resync after completion/cancel
-- [ ] Automatic refresh of profile, inventory, and world state after missions
+- [x] `/world` Next.js route with HUD shell + Phaser canvas host
+- [x] Phaser BootScene + WorldScene with hero movement, collisions, and room enter/leave events
+- [x] React bridge for Phaser events plus React Query hooks (profile, tasks, inventory, history)
+- [x] `TopHUD`, `FloatingButtons`, `TasksPanel`, `InventoryPanel`, `HistoryPanel` components
+- [x] `SessionOverlay` + `VictoryModal` surfaces with reward + cosmetic drop summaries
+- [x] Session state lock (movement disabled) and resync after completion/cancel
+- [x] Automatic refresh of profile, inventory, and world state after missions
 
 ### Section 9 — Non-Functional Targets
 
-- [ ] Canvas boot < 2s and hero movement at 60fps
-- [ ] Secure reward validation (auth + backend-only formulas)
-- [ ] Guards against duplicate session completion submissions
+- [x] Canvas boot < 2s and hero movement at 60fps
+- [x] Secure reward validation (auth + backend-only formulas)
+- [x] Guards against duplicate session completion submissions
 
 ---
 
