@@ -3,7 +3,6 @@ export const AUTH_ROUTE_PREFIXES = [
   "/signup",
   "/reset-password",
   "/forgot-password",
-  "/invite",
 ];
 
 export const PUBLIC_ROUTE_PREFIXES = [

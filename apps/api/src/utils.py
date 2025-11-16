@@ -1,61 +1,15 @@
-import logging
 import random
-import re
 import string
-import unicodedata
-from typing import Callable, Mapping
+from typing import Mapping
 from urllib.parse import urlencode
 
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from src.auth.models import Tenant
 from src.config import settings
-
-logger = logging.getLogger(__name__)
 
 ALPHA_NUM = string.ascii_letters + string.digits
 
 
 def generate_random_alphanum(length: int = 20) -> str:
     return "".join(random.choices(ALPHA_NUM, k=length))
-
-
-def slugify(value: str, *, default: str = "organization") -> str:
-    """
-    Generate a URL-safe slug from the provided value.
-
-    Falls back to ``default`` if the normalized string is empty.
-    """
-    normalized = unicodedata.normalize("NFKD", value)
-    ascii_value = normalized.encode("ascii", "ignore").decode("ascii")
-    slug = re.sub(r"[^a-zA-Z0-9]+", "-", ascii_value).strip("-").lower()
-    return slug or default
-
-
-async def generate_unique_slug(
-    session: AsyncSession,
-    base_value: str,
-    *,
-    slugifier: Callable[[str], str] = slugify,
-) -> str:
-    """
-    Produce a unique slug for the tenant table based on ``base_value``.
-
-    Appends a numeric suffix when necessary.
-    """
-    base_slug = slugifier(base_value)
-    candidate = base_slug
-    suffix = 1
-
-    while True:
-        result = await session.execute(
-            select(Tenant.id).where(Tenant.slug == candidate)
-        )
-        if result.scalar_one_or_none() is None:
-            return candidate
-        candidate = f"{base_slug}-{suffix}"
-        suffix += 1
 
 
 def _normalize_path(path: str) -> str:

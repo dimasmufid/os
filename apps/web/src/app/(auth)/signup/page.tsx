@@ -1,24 +1,13 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SignupForm } from "@/components/signup-form";
-import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 
 export default function SignupPage() {
-  return (
-    <Suspense fallback={<SignupPageFallback />}>
-      <SignupPageContent />
-    </Suspense>
-  );
-}
-
-function SignupPageContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { isAuthenticated, isLoading } = useAuth();
-  const inviteToken = searchParams.get("invite");
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
@@ -26,7 +15,11 @@ function SignupPageContent() {
     }
   }, [isAuthenticated, isLoading, router]);
 
-  return <SignupForm inviteToken={inviteToken} />;
+  if (isLoading) {
+    return <SignupPageFallback />;
+  }
+
+  return <SignupForm />;
 }
 
 function SignupPageFallback() {

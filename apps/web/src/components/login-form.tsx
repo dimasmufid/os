@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -28,23 +28,19 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface LoginFormProps extends React.ComponentProps<"form"> {
   onSuccess?: () => void;
-  inviteToken?: string | null;
-  defaultEmail?: string | null;
 }
 
 export function LoginForm({
   className,
   onSuccess,
-  inviteToken,
-  defaultEmail,
   ...props
 }: LoginFormProps) {
   const router = useRouter();
-  const { signin, isAuthenticated, refreshUser } = useAuth();
+  const { signin, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [formData, setFormData] = useState<SigninRequest>({
-    email: defaultEmail?.trim() ?? "",
+    email: "",
     password: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -54,29 +50,6 @@ export function LoginForm({
     null
   );
   const [isSendingReset, setIsSendingReset] = useState(false);
-
-  useEffect(() => {
-    if (!defaultEmail) {
-      return;
-    }
-    setFormData((prev) => {
-      if (prev.email.trim()) {
-        return prev;
-      }
-      return {
-        ...prev,
-        email: defaultEmail,
-      };
-    });
-    setErrors((prev) => {
-      if (!prev.email) {
-        return prev;
-      }
-      const next = { ...prev };
-      delete next.email;
-      return next;
-    });
-  }, [defaultEmail]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -199,25 +172,6 @@ export function LoginForm({
         email: formData.email.trim(),
         password: formData.password,
       });
-
-      if (inviteToken) {
-        try {
-          await authService.acceptInvitation(inviteToken);
-          await refreshUser();
-          toast.success("Undangan berhasil diterima.");
-        } catch (error) {
-          setIsLoading(false);
-          setIsRedirecting(false);
-          if (error instanceof ApiError) {
-            toast.error(
-              error.message || "Tidak dapat menerima undangan saat ini."
-            );
-          } else {
-            toast.error("Terjadi kesalahan saat menerima undangan.");
-          }
-          return;
-        }
-      }
 
       setIsLoading(false);
       setIsRedirecting(true);
@@ -370,7 +324,6 @@ export function LoginForm({
           </div>
           <GoogleAuthButton
             className="w-full"
-            inviteToken={inviteToken ?? undefined}
             onAuthStateChange={setIsLoading}
             onSuccess={handleGoogleSuccess}
             disabled={isFormDisabled}

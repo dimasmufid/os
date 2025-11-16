@@ -111,69 +111,6 @@ async def _deliver_message(
         logger.error("SMTP connection failed: %s", exc)
 
 
-async def send_invitation_email(
-    *,
-    invitee_email: str,
-    inviter_name: str,
-    organization_name: str,
-    invite_url: str,
-) -> None:
-    """Send the organization invitation email with a primary call-to-action."""
-
-    subject = f"You're invited to join {organization_name} on Entrefine Omnichannel"
-    text_body = (
-        f"{inviter_name} invited you to join the {organization_name} workspace "
-        f"on Entrefine Omnichannel.\n"
-        f"Accept the invitation: {invite_url}"
-    )
-
-    html_body = f"""
-    <div
-      style="font-family: 'Inter', -apple-system, BlinkMacSystemFont,
-             'Segoe UI', sans-serif;"
-    >
-      <p style="font-size: 16px;">Hi there,</p>
-      <p style="font-size: 16px;">
-        <strong>{inviter_name}</strong> invited you to collaborate in the
-        <strong>{organization_name}</strong> workspace on Entrefine Omnichannel.
-      </p>
-      <p style="font-size: 16px;">
-        Entrefine Omnichannel centralizes marketplace and storefront sales so your team can
-        make decisions faster.
-      </p>
-      <p style="margin: 32px 0; text-align: center;">
-        <a
-          href="{invite_url}"
-          style="display: inline-block; padding: 14px 24px; border-radius: 8px;
-                 background-color: #18181b; color: #ffffff;
-                 text-decoration: none; font-weight: 600;"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Accept invitation
-        </a>
-      </p>
-      <p style="font-size: 14px; color: #52525b;">
-        This link takes you to Entrefine Omnichannel, where you can finish setting up your
-        account using the email <strong>{invitee_email}</strong>.
-      </p>
-      <p style="font-size: 14px; color: #52525b;">
-        If you weren't expecting this, you can safely ignore it.
-      </p>
-      <p style="font-size: 14px; color: #52525b; margin-top: 32px;">
-        — Team Entrefine Omnichannel
-      </p>
-    </div>
-    """
-
-    await send_email(
-        to=[invitee_email],
-        subject=subject,
-        html=html_body,
-        text=text_body,
-    )
-
-
 async def send_password_reset_email(
     *,
     to_email: str,

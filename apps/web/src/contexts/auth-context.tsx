@@ -58,7 +58,6 @@ const initAuthState = (): AuthState => {
     user: null,
     isAuthenticated: false,
     isLoading: true,
-    activeOrganizationId: null,
   };
 };
 
@@ -101,10 +100,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     setAuthState((prev) => {
-      if (
-        prev.user?.id === storedUser.id &&
-        prev.activeOrganizationId === storedUser.active_organization_id
-      ) {
+      if (prev.user?.id === storedUser.id) {
         return prev;
       }
 
@@ -112,7 +108,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         ...prev,
         user: storedUser,
         isAuthenticated: true,
-        activeOrganizationId: storedUser.active_organization_id ?? null,
       };
     });
   }, [setAuthState]);
@@ -124,7 +119,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         user: currentUser,
         isAuthenticated: true,
         isLoading: false,
-        activeOrganizationId: currentUser.active_organization_id ?? null,
       });
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) {
@@ -133,7 +127,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
           user: null,
           isAuthenticated: false,
           isLoading: false,
-          activeOrganizationId: null,
         });
       } else {
         setAuthState((prev) => ({
@@ -176,12 +169,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     const isAuthenticated = Boolean(authState.user);
-    const activeOrganizationId = authState.user?.active_organization_id ?? null;
 
     if (
       !authState.isLoading &&
-      authState.isAuthenticated === isAuthenticated &&
-      authState.activeOrganizationId === activeOrganizationId
+      authState.isAuthenticated === isAuthenticated
     ) {
       return authState;
     }
@@ -190,7 +181,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       ...authState,
       isAuthenticated,
       isLoading: false,
-      activeOrganizationId,
     };
   }, [authState, shouldSkipAuthCheck]);
 
@@ -234,7 +224,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         user: response.user,
         isAuthenticated: true,
         isLoading: false,
-        activeOrganizationId: response.user.active_organization_id ?? null,
       });
 
       toast.success("Welcome back!");
@@ -261,7 +250,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         user: response.user,
         isAuthenticated: true,
         isLoading: false,
-        activeOrganizationId: response.user.active_organization_id ?? null,
       });
 
       toast.success(
@@ -302,7 +290,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         user: response.user,
         isAuthenticated: true,
         isLoading: false,
-        activeOrganizationId: response.user.active_organization_id ?? null,
       });
 
       toast.success("You're signed in with Google.");
@@ -319,78 +306,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const switchOrganization = async (organizationId: string): Promise<void> => {
-    try {
-      const response = await authService.switchOrganization({
-        organization_id: organizationId,
-      });
-
-      const activeOrg = response.user.memberships.find(
-        (membership) =>
-          membership.organization.id === response.user.active_organization_id
-      );
-
-      setAuthState({
-        user: response.user,
-        isAuthenticated: true,
-        isLoading: false,
-        activeOrganizationId: response.user.active_organization_id ?? null,
-      });
-
-      if (activeOrg) {
-        toast.success(`Switched to ${activeOrg.organization.name}`);
-      } else {
-        toast.success("Switched organization");
-      }
-    } catch (error) {
-      if (error instanceof ApiError) {
-        toast.error(error.message || "Unable to switch organization.");
-      } else {
-        toast.error("Network error. Please check your connection.");
-      }
-      throw error;
-    }
-  };
-
-  const createOrganization = async (name: string): Promise<void> => {
-    try {
-      const trimmedName = name.trim();
-      if (!trimmedName) {
-        toast.error("Organization name cannot be empty.");
-        return;
-      }
-
-      const response = await authService.createOrganization({
-        name: trimmedName,
-      });
-
-      const activeOrg = response.user.memberships.find(
-        (membership) =>
-          membership.organization.id === response.user.active_organization_id
-      );
-
-      setAuthState({
-        user: response.user,
-        isAuthenticated: true,
-        isLoading: false,
-        activeOrganizationId: response.user.active_organization_id ?? null,
-      });
-
-      if (activeOrg) {
-        toast.success(`Created ${activeOrg.organization.name}`);
-      } else {
-        toast.success("Created organization");
-      }
-    } catch (error) {
-      if (error instanceof ApiError) {
-        toast.error(error.message || "Failed to create organization.");
-      } else {
-        toast.error("Network error. Please check your connection.");
-      }
-      throw error;
-    }
-  };
-
   const logout = async (): Promise<void> => {
     try {
       await authService.logout();
@@ -399,7 +314,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        activeOrganizationId: null,
       });
 
       toast.success("Logged out successfully");
@@ -409,7 +323,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        activeOrganizationId: null,
       });
 
       if (error instanceof ApiError) {
@@ -426,7 +339,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setAuthState((prev) => ({
         ...prev,
         user,
-        activeOrganizationId: user.active_organization_id ?? null,
       }));
     } catch {
       // If refresh fails, user might need to re-authenticate
@@ -434,7 +346,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        activeOrganizationId: null,
       });
       authService.clearAuth();
     }
@@ -449,7 +360,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setAuthState((prev) => ({
         ...prev,
         user: updatedUser,
-        activeOrganizationId: updatedUser.active_organization_id ?? null,
       }));
 
       toast.success("Profile updated successfully.");
@@ -493,7 +403,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        activeOrganizationId: null,
       });
 
       toast.success("Password updated. Please sign in again.");
@@ -514,8 +423,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authenticateWithGoogle,
     logout,
     refreshUser,
-    switchOrganization,
-    createOrganization,
     changePassword,
     updateProfile,
   };

@@ -29,7 +29,6 @@ class RefreshTokenService:
         self,
         *,
         user: User,
-        default_tenant_id: UUID | None,
         user_agent: str | None,
         ip_address: str | None,
     ) -> tuple[RefreshSession, str]:
@@ -38,7 +37,6 @@ class RefreshTokenService:
 
         refresh_session = RefreshSession(
             user=user,
-            default_tenant_id=default_tenant_id,
             token_hash=hash_token(raw_token),
             user_agent=user_agent,
             ip=ip_address,
@@ -76,7 +74,6 @@ class RefreshTokenService:
 
         new_session, raw_token = await self.create_session(
             user=refresh_session.user,
-            default_tenant_id=refresh_session.default_tenant_id,
             user_agent=refresh_session.user_agent,
             ip_address=refresh_session.ip,
         )

@@ -50,16 +50,12 @@ interface GooglePromptNotification {
 
 interface GoogleAuthButtonProps
   extends Omit<ComponentProps<typeof Button>, "onClick"> {
-  inviteToken?: string | null;
-  organizationName?: string | null;
   onSuccess?: () => void;
   onAuthStateChange?: (isAuthenticating: boolean) => void;
 }
 
 export function GoogleAuthButton({
   className,
-  inviteToken,
-  organizationName,
   onSuccess,
   onAuthStateChange,
   disabled,
@@ -145,8 +141,6 @@ export function GoogleAuthButton({
       try {
         await authenticateWithGoogle({
           credential: response.credential,
-          invite_token: inviteToken ?? undefined,
-          organization_name: organizationName ?? undefined,
         });
 
         handleSuccessNavigation();
@@ -155,13 +149,7 @@ export function GoogleAuthButton({
         onAuthStateChange?.(false);
       }
     },
-    [
-      authenticateWithGoogle,
-      handleSuccessNavigation,
-      inviteToken,
-      onAuthStateChange,
-      organizationName,
-    ]
+    [authenticateWithGoogle, handleSuccessNavigation, onAuthStateChange]
   );
 
   const handleClick = useCallback(() => {

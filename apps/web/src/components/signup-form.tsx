@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,71 +14,32 @@ import Image from "next/image";
 
 interface SignupFormProps extends React.ComponentProps<"form"> {
   onSuccess?: () => void;
-  inviteToken?: string | null;
-  lockedEmail?: string | null;
 }
 
-type SignupFormState = Omit<
-  SignupRequest,
-  "full_name" | "organization_name" | "invite_token"
-> & {
-  full_name: string;
-  organization_name: string;
-  invite_token: string | null;
-  profile_picture: string | null;
+type SignupFormState = {
+  email: string;
+  password: string;
   confirm_password: string;
+  full_name: string;
+  profile_picture: string | null;
 };
 
 export function SignupForm({
   className,
   onSuccess,
-  inviteToken,
-  lockedEmail,
   ...props
 }: SignupFormProps) {
   const router = useRouter();
   const { signup } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<SignupFormState>({
-    email: lockedEmail ?? "",
+    email: "",
     password: "",
     confirm_password: "",
     full_name: "",
-    organization_name: "",
-    invite_token: inviteToken ?? null,
     profile_picture: null,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      invite_token: inviteToken ?? null,
-      organization_name: inviteToken ? "" : prev.organization_name,
-    }));
-
-    if (inviteToken) {
-      setErrors((prev) => {
-        if (!prev.organization_name) return prev;
-        const rest = { ...prev };
-        delete rest.organization_name;
-        return rest;
-      });
-    }
-  }, [inviteToken]);
-
-  useEffect(() => {
-    if (!lockedEmail) return;
-    setFormData((prev) => ({
-      ...prev,
-      email: lockedEmail,
-    }));
-    setErrors((prev) => {
-      const next = { ...prev };
-      delete next.email;
-      return next;
-    });
-  }, [lockedEmail]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -88,11 +49,6 @@ export function SignupForm({
       newErrors.email = "Email wajib diisi";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
       newErrors.email = "Masukkan alamat email yang valid";
-    } else if (
-      lockedEmail &&
-      emailValue.toLowerCase() !== lockedEmail.trim().toLowerCase()
-    ) {
-      newErrors.email = "Email tidak sesuai dengan undangan";
     }
 
     if (!formData.password) {
@@ -109,10 +65,6 @@ export function SignupForm({
       newErrors.confirm_password = "Konfirmasi password wajib diisi";
     } else if (formData.confirm_password !== formData.password) {
       newErrors.confirm_password = "Password tidak cocok";
-    }
-
-    if (!formData.invite_token && !formData.organization_name?.trim()) {
-      newErrors.organization_name = "Nama organisasi wajib diisi";
     }
 
     if (
@@ -262,10 +214,6 @@ export function SignupForm({
         email: formData.email.trim(),
         password: formData.password,
         full_name: formData.full_name.trim(),
-        organization_name: formData.invite_token
-          ? null
-          : formData.organization_name.trim(),
-        invite_token: formData.invite_token || undefined,
         profile_picture: formData.profile_picture ?? undefined,
       };
 
@@ -352,32 +300,6 @@ export function SignupForm({
             )}
           </div>
 
-          {formData.invite_token ? (
-            <div className="rounded-md border border-dashed border-primary/40 bg-primary/5 p-3 text-sm text-primary">
-              Anda diundang ke workspace ini
-            </div>
-          ) : (
-            <div className="grid gap-3">
-              <Label htmlFor="organization_name">Nama Organisasi</Label>
-              <Input
-                id="organization_name"
-                name="organization_name"
-                type="text"
-                placeholder="PT Contoh"
-                value={formData.organization_name || ""}
-                onChange={handleChange}
-                disabled={isLoading}
-                required
-                className={errors.organization_name ? "border-red-500" : ""}
-              />
-              {errors.organization_name && (
-                <p className="text-sm text-red-500">
-                  {errors.organization_name}
-                </p>
-              )}
-            </div>
-          )}
-
           <div className="grid gap-3">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -387,7 +309,7 @@ export function SignupForm({
               placeholder="m@example.com"
               value={formData.email}
               onChange={handleChange}
-              disabled={isLoading || !!lockedEmail}
+              disabled={isLoading}
               required
               className={errors.email ? "border-red-500" : ""}
             />

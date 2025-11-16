@@ -91,17 +91,9 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
         if not request or not response:
             return
 
-        await self.session.refresh(user, attribute_names=["tenants"])
         refresh_service = RefreshTokenService(self.session)
-        default_membership = next(
-            (membership for membership in user.tenants if membership.is_default),
-            user.tenants[0] if user.tenants else None,
-        )
         refresh_session, refresh_token = await refresh_service.create_session(
             user=user,
-            default_tenant_id=(
-                default_membership.tenant_id if default_membership else None
-            ),
             user_agent=request.headers.get("user-agent"),
             ip_address=request.client.host if request.client else None,
         )
