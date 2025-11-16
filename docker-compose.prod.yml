@@ -12,13 +12,13 @@ services:
       - /src/entrypoints/gunicorn.sh
 
   frontend:
-    image: frontend
+    image: web
     env_file:
       - .env
     ports:
       - "${FRONTEND_HOST_PORT:-3010}:3000" # set 3011 for staging, etc.
     build:
-      context: ./apps/frontend
+      context: ./apps/web
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8010}
