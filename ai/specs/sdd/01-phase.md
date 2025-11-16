@@ -1,4 +1,5 @@
 # LifeOS — Technical System Design Document (Phase 1)
+
 Version: 1.0  
 Status: Finalized for Engineering  
 Owner: Dimas  
@@ -16,49 +17,54 @@ This SDD is implementation-ready and can be assigned directly to engineers.
 
 ## Implementation Checklist
 
-Working checklist mapped to the sections below. Update entries to `[x]` once delivered.
+Working checklist mapped to the sections below. Update entries to `[ ]` once delivered.
 
 ### Section 2 — Core Emotional Loop
-- [x] Tilemap-based Central Plaza with Study, Build, and Training rooms plus collision boundaries
-- [x] WASD controls with smooth movement, idle animation, and directional sprite flipping
-- [x] Focus Session flow (25m/50m/90m durations, fullscreen overlay, movement lock)
-- [x] Reward distribution that applies XP/Gold formulas on successful sessions only
-- [x] Hero HUD: portrait, level, XP bar, gold, streak indicator, and level-up banner animation
-- [x] Cosmetic drop system (hat/outfit/accessory, rarity tiers, 10% drop rate, stored inventory unlock)
-- [x] Inventory panel listing cosmetics with equip/unequip that updates hero sprite
-- [x] World upgrade unlock logic (5/15/30 sessions) toggling decorative tile layers
-- [x] HUD panels with floating buttons for Tasks, Inventory, History
-- [x] Streak tracking with day counter and encouragement text
 
-### Section 5 — Drizzle Schema
-- [x] `hero_profiles` table storing hero stats/equipment bound to auth users
-- [x] `task_templates` table with per-user task definitions (name, category, default duration, room)
-- [x] `focus_sessions` table (task linkage, duration, timestamps, status, reward columns)
-- [x] `cosmetic_items` definitions plus `inventory_items` linking unlocked cosmetics to users
-- [x] `world_states` table capturing room levels, total successes, streak metadata
+- [ ] Tilemap-based Central Plaza with Study, Build, and Training rooms plus collision boundaries
+- [ ] WASD controls with smooth movement, idle animation, and directional sprite flipping
+- [ ] Focus Session flow (25m/50m/90m durations, fullscreen overlay, movement lock)
+- [ ] Reward distribution that applies XP/Gold formulas on successful sessions only
+- [ ] Hero HUD: portrait, level, XP bar, gold, streak indicator, and level-up banner animation
+- [ ] Cosmetic drop system (hat/outfit/accessory, rarity tiers, 10% drop rate, stored inventory unlock)
+- [ ] Inventory panel listing cosmetics with equip/unequip that updates hero sprite
+- [ ] World upgrade unlock logic (5/15/30 sessions) toggling decorative tile layers
+- [ ] HUD panels with floating buttons for Tasks, Inventory, History
+- [ ] Streak tracking with day counter and encouragement text
+
+### Section 5 — SQLAlchemy Schema
+
+- [ ] `hero_profiles` table storing hero stats/equipment bound to auth users
+- [ ] `task_templates` table with per-user task definitions (name, category, default duration, room)
+- [ ] `focus_sessions` table (task linkage, duration, timestamps, status, reward columns)
+- [ ] `cosmetic_items` definitions plus `inventory_items` linking unlocked cosmetics to users
+- [ ] `world_states` table capturing room levels, total successes, streak metadata
 
 ### Section 6 — Backend Modules & APIs
-- [x] Hero/Profile module providing `GET /profile` and hero mutation helpers
-- [x] Task module with CRUD plus `GET /tasks`
-- [x] Session module: `/sessions/start`, `/sessions/complete`, `/sessions/cancel`, `/sessions/history`
-- [x] Inventory module: `GET /inventory` list + `/inventory/equip`
-- [x] World module exposing world state read/upgrade operations
-- [x] Reward service encapsulating XP/Gold formulas, streak progression, cosmetic drops, world upgrades
-- [x] NestJS wiring for Drizzle/Postgres, DTO validation, and auth guards
+
+- [ ] Hero/Profile module providing `GET /profile` and hero mutation helpers
+- [ ] Task module with CRUD plus `GET /tasks`
+- [ ] Session module: `/sessions/start`, `/sessions/complete`, `/sessions/cancel`, `/sessions/history`
+- [ ] Inventory module: `GET /inventory` list + `/inventory/equip`
+- [ ] World module exposing world state read/upgrade operations
+- [ ] Reward service encapsulating XP/Gold formulas, streak progression, cosmetic drops, world upgrades
+- [ ] FastAPI wiring for SQLAlchemy/Postgres, Pydantic validation, and FastAPI-Users auth guards
 
 ### Section 7 — Frontend Experience
-- [x] `/world` TanStack route with HUD shell + Phaser canvas host
-- [x] Phaser BootScene + WorldScene with hero movement, collisions, and room enter/leave events
-- [x] React bridge for Phaser events plus TanStack Query hooks (profile, tasks, inventory, history)
-- [x] `TopHUD`, `FloatingButtons`, `TasksPanel`, `InventoryPanel`, `HistoryPanel` components
-- [x] `SessionOverlay` + `VictoryModal` surfaces with reward + cosmetic drop summaries
-- [x] Session state lock (movement disabled) and resync after completion/cancel
-- [x] Automatic refresh of profile, inventory, and world state after missions
+
+- [ ] `/world` Next.js route with HUD shell + Phaser canvas host
+- [ ] Phaser BootScene + WorldScene with hero movement, collisions, and room enter/leave events
+- [ ] React bridge for Phaser events plus React Query hooks (profile, tasks, inventory, history)
+- [ ] `TopHUD`, `FloatingButtons`, `TasksPanel`, `InventoryPanel`, `HistoryPanel` components
+- [ ] `SessionOverlay` + `VictoryModal` surfaces with reward + cosmetic drop summaries
+- [ ] Session state lock (movement disabled) and resync after completion/cancel
+- [ ] Automatic refresh of profile, inventory, and world state after missions
 
 ### Section 9 — Non-Functional Targets
-- [x] Canvas boot < 2s and hero movement at 60fps
-- [x] Secure reward validation (auth + backend-only formulas)
-- [x] Guards against duplicate session completion submissions
+
+- [ ] Canvas boot < 2s and hero movement at 60fps
+- [ ] Secure reward validation (auth + backend-only formulas)
+- [ ] Guards against duplicate session completion submissions
 
 ---
 
@@ -70,6 +76,7 @@ Build the **core emotional loop**:
 This phase establishes the foundational LifeOS identity and must ship first.
 
 ## 2.1 2D World
+
 - Central Plaza
 - Study Room
 - Build Room
@@ -78,12 +85,14 @@ This phase establishes the foundational LifeOS identity and must ship first.
 - Player collision + boundaries
 
 ## 2.2 Player Movement
+
 - WASD controls
 - Smooth movement
 - Idle animation
 - Direction-based sprite flipping (optional)
 
 ## 2.3 Focus Sessions ("Missions")
+
 - Session lengths: **25m, 50m, 90m**
 - Fullscreen timer overlay
 - “Session Running” state disables movement
@@ -91,65 +100,78 @@ This phase establishes the foundational LifeOS identity and must ship first.
 - Failure → no punishment
 
 ## 2.4 Rewards
+
 ### XP
+
 ```
 XP = duration_minutes * 2
 ```
 
 ### Gold
+
 ```
 Gold = duration_minutes * 1
 ```
 
 ## 2.5 Hero System
+
 - Level
 - EXP bar
 - Level-up banner animation
 - Hero portrait in HUD
 
 ## 2.6 Cosmetic System
+
 - Cosmetic types: Hat, Outfit, Accessory
 - Rarity tiers: Common, Rare, Epic
 - 10% drop chance per session
 - Cosmetic unlock stored in inventory
 
 ## 2.7 Inventory Panel
+
 - List cosmetics
 - Equip/unequip flows
 - Equipped items update hero sprite
 
 ## 2.8 World Upgrades
+
 ```
 5 sessions  → Study Room Level 2
 15 sessions → Build Room Level 2
 30 sessions → Plaza Upgrade
 ```
+
 Unlock decorative tile layers.
 
 ## 2.9 HUD Panels
+
 - Top bar: Level, XP, Gold, Streak
 - Floating buttons: Tasks, Inventory, History
 
 ## 2.10 Streak System
+
 - Day streak counter
 - Gentle encouragement text
 
 ## 2.11 Authentication Gate
-- `/world` access requires an authenticated user session from Better Auth
+
+- `/world` access requires an authenticated user session from FastAPI-Users
 - Unauthenticated visitors are redirected to `/login` to sign in or create an account
 - Login route provides email/password + Google flows and returns users to their original destination
 
 **Deliverables**
+
 - World map (JSON)
 - Basic hero sprite
 - Phaser integration
-- TanStack Start app skeleton
-- NestJS API (core modules)
-- Drizzle schema
+- Next.js app skeleton
+- FastAPI API (core modules)
+- SQLAlchemy models
 - WebSocket gateway (optional)
 - Docker deployment
 
 **Success Criteria**
+
 - User can walk around world
 - User can start/complete missions
 - User sees XP/Gold rewards
@@ -163,15 +185,15 @@ Unlock decorative tile layers.
 
 ```
                ┌────────────────────────┐
-               │      TanStack Start     │
+               │        Next.js          │
                │  React + Phaser Client  │
                └─────────────▲───────────┘
                              │ HTTP (REST)
                        WebSocket (later)
                              │
                ┌─────────────┴───────────┐
-               │         NestJS API       │
-               │  (REST + Future WS)      │
+               │        FastAPI API        │
+               │  (REST + Future WS)       │
                └─────────────▲───────────┘
                              │
          ┌──────────┬────────┴───────────┬──────────┐
@@ -180,12 +202,13 @@ Unlock decorative tile layers.
    (Remote DB)   caching              storage      (Workspace)
 ```
 
-Frontend:  
-- TanStack Start, React, Phaser  
-Backend:  
-- NestJS, Drizzle ORM  
-Stateful services:  
-- Remote Postgres, optional Redis, MinIO  
+Frontend:
+
+- Next.js, React, Phaser  
+  Backend:
+- FastAPI, SQLAlchemy ORM  
+  Stateful services:
+- Remote Postgres, optional Redis, MinIO
 
 ---
 
@@ -193,11 +216,11 @@ Stateful services:
 
 ```
 /apps
-  /web        # TanStack Start + Phaser
-  /api        # NestJS backend
+  /web        # Next.js + Phaser
+  /api        # FastAPI backend
 
 /packages
-  /db         # Drizzle schema + migrations + db client
+  /db         # SQLAlchemy models + migrations + db client
   /types      # Shared TS types (Hero, WorldState, Rewards)
   /utils      # Shared helpers
 
@@ -210,93 +233,104 @@ infra/
 
 ---
 
-# 5. Drizzle Database Schema (Phase 1)
+# 5. SQLAlchemy Database Schema (Phase 1)
 
-Located in: `/packages/db/schema.ts`
+Located in: `/apps/api/src/models.py`
 
-```ts
-import { pgTable, varchar, integer, timestamp, serial, boolean } from "drizzle-orm/pg-core";
+```python
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  email: varchar("email").notNull(),
-  createdAt: timestamp("created_at").defaultNow()
-});
+Base = declarative_base()
 
-export const heroes = pgTable("heroes", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  level: integer("level").default(1),
-  exp: integer("exp").default(0),
-  gold: integer("gold").default(0),
+class User(Base):
+    __tablename__ = "users"
 
-  equippedHatId: integer("equipped_hat_id"),
-  equippedOutfitId: integer("equipped_outfit_id"),
-  equippedAccessoryId: integer("equipped_accessory_id")
-});
+    id = Column(Integer, primary_key=True)
+    email = Column(String, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
 
-export const taskTemplates = pgTable("task_templates", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  name: varchar("name"),
-  category: varchar("category"),
-  defaultDuration: integer("default_duration"),
-  room: varchar("room") // "study" | "build" | "training"
-});
+class Hero(Base):
+    __tablename__ = "heroes"
 
-export const sessions = pgTable("sessions", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  taskTemplateId: integer("task_template_id").references(() => taskTemplates.id),
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    level = Column(Integer, default=1)
+    exp = Column(Integer, default=0)
+    gold = Column(Integer, default=0)
 
-  room: varchar("room"),
-  durationMinutes: integer("duration_minutes"),
-  startedAt: timestamp("started_at").defaultNow(),
-  endedAt: timestamp("ended_at"),
-  status: varchar("status"), // "pending" | "success" | "cancel"
+    equipped_hat_id = Column(Integer, nullable=True)
+    equipped_outfit_id = Column(Integer, nullable=True)
+    equipped_accessory_id = Column(Integer, nullable=True)
 
-  rewardExp: integer("reward_exp"),
-  rewardGold: integer("reward_gold")
-});
+class TaskTemplate(Base):
+    __tablename__ = "task_templates"
 
-export const items = pgTable("items", {
-  id: serial("id").primaryKey(),
-  name: varchar("name"),
-  type: varchar("type"), // "hat" | "outfit" | "accessory"
-  rarity: varchar("rarity"), // "common" | "rare" | "epic"
-  spriteKey: varchar("sprite_key")
-});
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    name = Column(String)
+    category = Column(String)
+    default_duration = Column(Integer)
+    room = Column(String)  # "study" | "build" | "training"
 
-export const inventory = pgTable("inventory", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  itemId: integer("item_id").references(() => items.id),
-  obtainedAt: timestamp("obtained_at").defaultNow()
-});
+class Session(Base):
+    __tablename__ = "sessions"
 
-export const worldStates = pgTable("world_states", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    task_template_id = Column(Integer, ForeignKey("task_templates.id"))
 
-  studyRoomLevel: integer("study_room_level").default(1),
-  buildRoomLevel: integer("build_room_level").default(1),
-  trainingRoomLevel: integer("training_room_level").default(1),
+    room = Column(String)
+    duration_minutes = Column(Integer)
+    started_at = Column(DateTime, server_default=func.now())
+    ended_at = Column(DateTime, nullable=True)
+    status = Column(String)  # "pending" | "success" | "cancel"
 
-  totalSessionsSuccess: integer("total_sessions_success").default(0),
-  dayStreak: integer("day_streak").default(0),
-  lastSessionDate: timestamp("last_session_date")
-});
+    reward_exp = Column(Integer, nullable=True)
+    reward_gold = Column(Integer, nullable=True)
+
+class Item(Base):
+    __tablename__ = "items"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    type = Column(String)  # "hat" | "outfit" | "accessory"
+    rarity = Column(String)  # "common" | "rare" | "epic"
+    sprite_key = Column(String)
+
+class Inventory(Base):
+    __tablename__ = "inventory"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    item_id = Column(Integer, ForeignKey("items.id"))
+    obtained_at = Column(DateTime, server_default=func.now())
+
+class WorldState(Base):
+    __tablename__ = "world_states"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+
+    study_room_level = Column(Integer, default=1)
+    build_room_level = Column(Integer, default=1)
+    training_room_level = Column(Integer, default=1)
+
+    total_sessions_success = Column(Integer, default=0)
+    day_streak = Column(Integer, default=0)
+    last_session_date = Column(DateTime, nullable=True)
 ```
 
 ---
 
-# 6. Backend (NestJS) Technical Design
+# 6. Backend (FastAPI) Technical Design
 
 Located in `/apps/api`
 
 ---
 
-## 6.1 NestJS Modules (Phase 1)
+## 6.1 FastAPI Routers (Phase 1)
 
 ```
 src/
@@ -307,42 +341,50 @@ src/
  ├─ inventory/
  ├─ reward/
  ├─ common/
- └─ main.ts
+ └─ main.py
 ```
 
-**Required modules:**
+**Required routers:**
 
-### `HeroModule`  
-- Get hero  
+### `HeroRouter`
+
+- Get hero
 - Update hero (exp, level, gold, equip)
 
-### `SessionModule`  
-- startSession  
-- completeSession  
-- cancelSession  
+### `SessionRouter`
+
+- startSession
+- completeSession
+- cancelSession
 - getHistory
 
-### `TaskModule`  
-- list user tasks  
+### `TaskRouter`
+
+- list user tasks
 - create / edit / delete tasks
 
-### `WorldStateModule`  
-- read world state  
+### `WorldStateRouter`
+
+- read world state
 - apply upgrades
 
-### `RewardModule`  
+### `RewardService`
+
 Core gamification logic:
-- calculateRewards  
-- applyLevelUp  
-- rollCosmeticDrop  
-- updateWorldProgression  
+
+- calculateRewards
+- applyLevelUp
+- rollCosmeticDrop
+- updateWorldProgression
 
 ---
 
 ## 6.2 REST API Contracts (Phase 1)
 
 ### `GET /profile`
+
 Returns:
+
 ```json
 {
   "hero": { ... },
@@ -351,10 +393,13 @@ Returns:
 ```
 
 ### `GET /tasks`
+
 Returns user task templates.
 
 ### `POST /sessions/start`
+
 Input:
+
 ```json
 {
   "taskTemplateId": 12,
@@ -362,7 +407,9 @@ Input:
   "room": "study"
 }
 ```
+
 Output:
+
 ```json
 {
   "sessionId": 87,
@@ -371,12 +418,15 @@ Output:
 ```
 
 ### `POST /sessions/complete`
+
 Input:
+
 ```
 { "sessionId": 87 }
 ```
 
 Output:
+
 ```json
 {
   "expReward": 50,
@@ -388,36 +438,43 @@ Output:
 ```
 
 ### `POST /sessions/cancel`
+
 ```
 { "sessionId": 87 }
 ```
 
 ### `GET /inventory`
+
 Returns:
+
 - all owned items
 - equipped items
 
 ### `POST /inventory/equip`
+
 ```
 { "itemId": 15 }
 ```
 
 ### `GET /sessions/history`
+
 Paginated history.
 
 ---
 
 ## 6.3 Reward Engine Logic
 
-Located in: `/apps/api/src/reward/reward.service.ts`
+Located in: `/apps/api/src/reward/reward.py`
 
 ### Formulas
+
 ```
 exp = durationMinutes * 2
 gold = durationMinutes * 1
 ```
 
 **Leveling**
+
 ```
 expNeeded = hero.level * 100
 ```
@@ -426,6 +483,7 @@ expNeeded = hero.level * 100
 10% chance.
 
 **Room Upgrade Thresholds**
+
 ```
 5 successes  → study_room_level++
 15 successes → build_room_level++
@@ -433,13 +491,14 @@ expNeeded = hero.level * 100
 ```
 
 **Streak**
-- If last session day = today → streak stays  
-- If last session day = yesterday → streak++  
-- Else → streak = 1  
+
+- If last session day = today → streak stays
+- If last session day = yesterday → streak++
+- Else → streak = 1
 
 ---
 
-# 7. Frontend (TanStack Start + Phaser) Technical Design
+# 7. Frontend (Next.js + Phaser) Technical Design
 
 Located in: `/apps/web`
 
@@ -454,12 +513,14 @@ Located in: `/apps/web`
 ## 7.2 Frontend State
 
 **Server state:**
+
 - profile (hero + worldState)
 - tasks
 - inventory
 - history
 
 **Local state:**
+
 - currentRoom: "study" | "build" | "training" | null
 - activePanel: "none" | "tasks" | "inventory" | "history"
 - ongoingSession: { sessionId, expectedEnd, duration }
@@ -472,9 +533,11 @@ Located in: `/apps/web`
 **Scenes:**
 
 ### `BootScene`
+
 - Load tiles, sprites, JSON maps
 
 ### `WorldScene`
+
 - Render Central Plaza tilemap
 - Add rooms & collision
 - Add hero sprite + movement
@@ -492,38 +555,45 @@ GameCanvas is a <div> with ref passed to Phaser.
 ## 7.4 UI Layout System
 
 ### `TopHUD`
-- XP bar  
-- Gold  
-- Level  
-- Hero portrait  
-- Streak indicator  
+
+- XP bar
+- Gold
+- Level
+- Hero portrait
+- Streak indicator
 
 ### `FloatingButtons`
-- Tasks  
-- Inventory  
-- History  
+
+- Tasks
+- Inventory
+- History
 
 ### `TasksPanel`
-- Choose task  
-- Choose duration  
+
+- Choose task
+- Choose duration
 - [Start Mission]
 
 ### `InventoryPanel`
-- List items  
-- Equip items  
+
+- List items
+- Equip items
 
 ### `HistoryPanel`
-- List of past sessions  
+
+- List of past sessions
 
 ### `SessionOverlay`
-- Fullscreen  
-- Timer  
-- Motivational message  
-- Cancel button  
+
+- Fullscreen
+- Timer
+- Motivational message
+- Cancel button
 
 ### `VictoryModal`
-- Rewards  
-- Cosmetic drop summary  
+
+- Rewards
+- Cosmetic drop summary
 
 ---
 
@@ -550,58 +620,64 @@ GameCanvas is a <div> with ref passed to Phaser.
 # 9. Non-Functional Requirements
 
 ### Performance
-- Game canvas loads < 2 seconds  
-- Movement 60fps  
+
+- Game canvas loads < 2 seconds
+- Movement 60fps
 
 ### Security
-- JWT or session auth  
-- Backend validates reward logic  
+
+- JWT or session auth
+- Backend validates reward logic
 
 ### Reliability
-- Session completion never lost  
-- Avoid double-complete  
+
+- Session completion never lost
+- Avoid double-complete
 
 ### Scalability (Later)
-- Redis Pub/Sub for WS  
-- Multiple world themes  
-- Multiplayer  
+
+- Redis Pub/Sub for WS
+- Multiple world themes
+- Multiplayer
 
 ---
 
 # 10. Deliverables for Engineering Team
 
 ### Backend Team
-- Drizzle schema + migrations  
-- NestJS modules + endpoints  
-- Reward engine  
-- World upgrade logic  
-- History queries  
-- Inventory equip flow  
+
+- SQLAlchemy models + migrations
+- FastAPI routers + endpoints
+- Reward engine
+- World upgrade logic
+- History queries
+- Inventory equip flow
 
 ### Frontend Team
-- Phaser world  
-- Movement  
-- Rooms  
-- HUD  
-- Floating panels  
-- Session overlay  
-- Victory modal  
-- Integrations (TanStack Query)  
-- Responsive layout  
+
+- Phaser world
+- Movement
+- Rooms
+- HUD
+- Floating panels
+- Session overlay
+- Victory modal
+- Integrations (React Query / SWR)
+- Responsive layout
 
 ---
 
 # 11. Out of Scope (Phase 1)
 
-- AI quests  
-- Multiplayer  
-- Chat  
-- Room editor  
-- Mobile app  
-- Long-term storage for markdown docs  
-- Advanced world themes  
-- NPCs  
+- AI quests
+- Multiplayer
+- Chat
+- Room editor
+- Mobile app
+- Long-term storage for markdown docs
+- Advanced world themes
+- NPCs
 
 ---
 
-# End of Document**
+# End of Document\*\*

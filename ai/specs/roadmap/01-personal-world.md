@@ -81,9 +81,9 @@ Unlock decorative tile layers.
 - World map (JSON)
 - Basic hero sprite
 - Phaser integration
-- TanStack Start app skeleton
-- NestJS API (core modules)
-- Drizzle schema
+- Next.js app skeleton
+- FastAPI API (core modules)
+- SQLAlchemy models
 - WebSocket gateway (optional)
 - Docker deployment
 

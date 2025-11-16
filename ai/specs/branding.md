@@ -199,15 +199,15 @@ EXP to next level = level * 100
 # 8. Architecture
 
 ## 8.1 Frontend
-- TanStack Start  
+- Next.js  
 - React + TypeScript  
 - Phaser 3  
 - WebSocket client  
-- Drizzle types from shared package  
+- Shared types from API  
 
 ## 8.2 Backend
-- NestJS  
-- Drizzle ORM  
+- FastAPI  
+- SQLAlchemy ORM  
 - WebSocket gateway  
 - Remote Postgres  
 - Redis cache  
