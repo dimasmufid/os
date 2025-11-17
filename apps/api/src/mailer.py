@@ -206,7 +206,8 @@ async def send_verification_email(
         </a>
       </p>
       <p style="font-size: 14px; color: #52525b;">
-        If you did not sign up for Entrefine Omnichannel, you can safely ignore this email.
+        If you did not sign up for Entrefine Omnichannel,
+        you can safely ignore this email.
       </p>
       <p style="font-size: 14px; color: #52525b; margin-top: 32px;">
         — Team Entrefine Omnichannel

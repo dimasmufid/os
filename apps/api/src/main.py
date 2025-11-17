@@ -5,11 +5,15 @@ import sentry_sdk
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from src.auth import (
-    auth_router,
-    oauth_google_router,
-)
+from src.auth import auth_router, oauth_google_router
+from src.badges import badges_router
+from src.completions import completions_router
 from src.config import app_configs, settings
+from src.docs import docs_router
+from src.gamification import gamification_router
+from src.nodes import nodes_router
+from src.time_tracking import time_tracking_router
+from src.tracks import tracks_router
 
 
 @asynccontextmanager
@@ -39,6 +43,13 @@ if settings.ENVIRONMENT.is_deployed:
 
 app.include_router(auth_router, prefix="/api/v1/auth")
 app.include_router(oauth_google_router, prefix="/api/v1/oauth")
+app.include_router(tracks_router, prefix="/api/v1")
+app.include_router(nodes_router, prefix="/api/v1")
+app.include_router(time_tracking_router, prefix="/api/v1")
+app.include_router(completions_router, prefix="/api/v1")
+app.include_router(gamification_router, prefix="/api/v1")
+app.include_router(badges_router, prefix="/api/v1")
+app.include_router(docs_router, prefix="/api/v1")
 
 
 @app.get("/healthcheck", include_in_schema=False)

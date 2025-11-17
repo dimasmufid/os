@@ -6,10 +6,12 @@ Create Date: 2025-11-16 16:34:47.183198
 
 """
 
+from uuid import uuid4
+
 import fastapi_users_db_sqlalchemy
 import sqlalchemy as sa
+
 from alembic import op
-from uuid import uuid4
 
 # revision identifiers, used by Alembic.
 revision = "561948a1bb69"

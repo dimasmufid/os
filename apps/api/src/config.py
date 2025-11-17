@@ -1,8 +1,7 @@
 from typing import Any, Literal
 
-from pydantic import PostgresDsn, model_validator
+from pydantic import AnyHttpUrl, PostgresDsn, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import AnyHttpUrl
 
 from src.constants import Environment
 
@@ -41,7 +40,7 @@ class Config(CustomBaseSettings):
     OAUTH_GOOGLE_CLIENT_SECRET: str | None = None
     OAUTH_GOOGLE_REDIRECT_URI: AnyHttpUrl | None = None
     APP_BASE_URL: AnyHttpUrl | None = None
-    
+
     SMTP_HOST: str | None = None
     SMTP_PORT: int = 587
     SMTP_USER: str | None = None

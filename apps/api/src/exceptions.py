@@ -25,6 +25,11 @@ class BadRequest(DetailedHTTPException):
     DETAIL = "Bad Request"
 
 
+class Conflict(DetailedHTTPException):
+    STATUS_CODE = status.HTTP_409_CONFLICT
+    DETAIL = "Conflict"
+
+
 class NotAuthenticated(DetailedHTTPException):
     STATUS_CODE = status.HTTP_401_UNAUTHORIZED
     DETAIL = "User not authenticated"
