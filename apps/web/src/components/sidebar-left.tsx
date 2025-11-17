@@ -2,24 +2,35 @@
 
 import * as React from "react";
 import {
-  AudioWaveform,
-  Blocks,
+  Book,
+  BookOpen,
+  Briefcase,
+  Building2,
   Calendar,
-  Command,
+  Camera,
+  Clock,
+  FileEdit,
+  Globe,
+  GraduationCap,
+  Heart,
   Home,
-  Inbox,
-  MessageCircleQuestion,
-  Search,
+  LayoutDashboard,
+  Luggage,
+  MapPin,
+  Music2,
+  Palette,
   Settings2,
   Sparkles,
-  Trash2,
+  Target,
+  Users,
+  User,
+  Wallet,
+  Wrench,
 } from "lucide-react";
 
-import { NavFavorites } from "@/components/nav-favorites";
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavWorkspaces } from "@/components/nav-workspaces";
-import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -29,229 +40,138 @@ import {
 
 // This is sample data.
 const data = {
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: Command,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
-      title: "Search",
-      url: "#",
-      icon: Search,
-    },
-    {
-      title: "Ask AI",
-      url: "#",
-      icon: Sparkles,
-    },
-    {
       title: "Home",
-      url: "#",
+      url: "/home",
       icon: Home,
-      isActive: true,
     },
     {
-      title: "Inbox",
-      url: "#",
-      icon: Inbox,
-      badge: "10",
+      title: "Timesheet",
+      url: "/timesheet",
+      icon: Clock,
+    },
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Docs",
+      url: "/docs",
+      icon: Book,
     },
   ],
   navSecondary: [
-    {
-      title: "Calendar",
-      url: "#",
-      icon: Calendar,
-    },
     {
       title: "Settings",
       url: "#",
       icon: Settings2,
     },
-    {
-      title: "Templates",
-      url: "#",
-      icon: Blocks,
-    },
-    {
-      title: "Trash",
-      url: "#",
-      icon: Trash2,
-    },
-    {
-      title: "Help",
-      url: "#",
-      icon: MessageCircleQuestion,
-    },
-  ],
-  favorites: [
-    {
-      name: "Project Management & Task Tracking",
-      url: "#",
-      emoji: "📊",
-    },
-    {
-      name: "Family Recipe Collection & Meal Planning",
-      url: "#",
-      emoji: "🍳",
-    },
-    {
-      name: "Fitness Tracker & Workout Routines",
-      url: "#",
-      emoji: "💪",
-    },
-    {
-      name: "Book Notes & Reading List",
-      url: "#",
-      emoji: "📚",
-    },
-    {
-      name: "Sustainable Gardening Tips & Plant Care",
-      url: "#",
-      emoji: "🌱",
-    },
-    {
-      name: "Language Learning Progress & Resources",
-      url: "#",
-      emoji: "🗣️",
-    },
-    {
-      name: "Home Renovation Ideas & Budget Tracker",
-      url: "#",
-      emoji: "🏠",
-    },
-    {
-      name: "Personal Finance & Investment Portfolio",
-      url: "#",
-      emoji: "💰",
-    },
-    {
-      name: "Movie & TV Show Watchlist with Reviews",
-      url: "#",
-      emoji: "🎬",
-    },
-    {
-      name: "Daily Habit Tracker & Goal Setting",
-      url: "#",
-      emoji: "✅",
-    },
   ],
   workspaces: [
     {
       name: "Personal Life Management",
-      emoji: "🏠",
+      icon: User,
       pages: [
         {
           name: "Daily Journal & Reflection",
           url: "#",
-          emoji: "📔",
+          icon: BookOpen,
         },
         {
           name: "Health & Wellness Tracker",
           url: "#",
-          emoji: "🍏",
+          icon: Heart,
         },
         {
           name: "Personal Growth & Learning Goals",
           url: "#",
-          emoji: "🌟",
+          icon: Sparkles,
         },
       ],
     },
     {
       name: "Professional Development",
-      emoji: "💼",
+      icon: Briefcase,
       pages: [
         {
           name: "Career Objectives & Milestones",
           url: "#",
-          emoji: "🎯",
+          icon: Target,
         },
         {
           name: "Skill Acquisition & Training Log",
           url: "#",
-          emoji: "🧠",
+          icon: GraduationCap,
         },
         {
           name: "Networking Contacts & Events",
           url: "#",
-          emoji: "🤝",
+          icon: Users,
         },
       ],
     },
     {
       name: "Creative Projects",
-      emoji: "🎨",
+      icon: Palette,
       pages: [
         {
           name: "Writing Ideas & Story Outlines",
           url: "#",
-          emoji: "✍️",
+          icon: FileEdit,
         },
         {
           name: "Art & Design Portfolio",
           url: "#",
-          emoji: "🖼️",
+          icon: Palette,
         },
         {
           name: "Music Composition & Practice Log",
           url: "#",
-          emoji: "🎵",
+          icon: Music2,
         },
       ],
     },
     {
       name: "Home Management",
-      emoji: "🏡",
+      icon: Building2,
       pages: [
         {
           name: "Household Budget & Expense Tracking",
           url: "#",
-          emoji: "💰",
+          icon: Wallet,
         },
         {
           name: "Home Maintenance Schedule & Tasks",
           url: "#",
-          emoji: "🔧",
+          icon: Wrench,
         },
         {
           name: "Family Calendar & Event Planning",
           url: "#",
-          emoji: "📅",
+          icon: Calendar,
         },
       ],
     },
     {
       name: "Travel & Adventure",
-      emoji: "🧳",
+      icon: Luggage,
       pages: [
         {
           name: "Trip Planning & Itineraries",
           url: "#",
-          emoji: "🗺️",
+          icon: MapPin,
         },
         {
           name: "Travel Bucket List & Inspiration",
           url: "#",
-          emoji: "🌎",
+          icon: Globe,
         },
         {
           name: "Travel Journal & Photo Gallery",
           url: "#",
-          emoji: "📸",
+          icon: Camera,
         },
       ],
     },
@@ -262,18 +182,11 @@ export function SidebarLeft({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar
-      className="border-r-0"
-      variant="inset"
-      collapsible="icon"
-      {...props}
-    >
+    <Sidebar className="border-r-0" collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
         <NavMain items={data.navMain} />
       </SidebarHeader>
       <SidebarContent>
-        <NavFavorites favorites={data.favorites} />
         <NavWorkspaces workspaces={data.workspaces} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

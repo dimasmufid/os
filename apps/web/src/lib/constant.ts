@@ -6,7 +6,6 @@ export const AUTH_ROUTE_PREFIXES = [
 ];
 
 export const PUBLIC_ROUTE_PREFIXES = [
-  "/dashboard",
   "/pricing",
   "/about",
   "/contact",
