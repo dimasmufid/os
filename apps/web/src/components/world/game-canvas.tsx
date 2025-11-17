@@ -161,7 +161,11 @@ class LifeOSWorldScene extends Phaser.Scene {
   }
 
   handleResize(width: number, height: number) {
-    this.physics.world.setBounds(0, 0, width, height);
+    const world = this.physics?.world;
+    if (!world) {
+      return;
+    }
+    world.setBounds(0, 0, width, height);
     Object.entries(this.zones).forEach(([room, zone]) => {
       const rect = this.roomRects.get(room as RoomName);
       const label = this.roomLabels.get(room as RoomName);
