@@ -10,12 +10,8 @@ export default function LoginPage() {
   const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
-    router.prefetch("/world");
-  }, [router]);
-
-  useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.replace("/world");
+      router.replace("/");
     }
   }, [isAuthenticated, isLoading, router]);
 

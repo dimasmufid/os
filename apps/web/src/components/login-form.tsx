@@ -175,7 +175,7 @@ export function LoginForm({ className, onSuccess, ...props }: LoginFormProps) {
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push("/world");
+        router.push("/");
       }
     } catch {
       setIsLoading(false);
@@ -189,7 +189,7 @@ export function LoginForm({ className, onSuccess, ...props }: LoginFormProps) {
     if (onSuccess) {
       onSuccess();
     } else {
-      router.push("/world");
+      router.push("/");
     }
   };
   return (

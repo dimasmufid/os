@@ -10,11 +10,6 @@ from src.auth import (
     oauth_google_router,
 )
 from src.config import app_configs, settings
-from src.lifeos.routers.hero import router as hero_router
-from src.lifeos.routers.inventory import router as inventory_router
-from src.lifeos.routers.sessions import router as sessions_router
-from src.lifeos.routers.tasks import router as tasks_router
-from src.lifeos.routers.world import router as world_router
 
 
 @asynccontextmanager
@@ -44,11 +39,6 @@ if settings.ENVIRONMENT.is_deployed:
 
 app.include_router(auth_router, prefix="/api/v1/auth")
 app.include_router(oauth_google_router, prefix="/api/v1/oauth")
-app.include_router(hero_router, prefix="/api/v1")
-app.include_router(tasks_router, prefix="/api/v1")
-app.include_router(sessions_router, prefix="/api/v1")
-app.include_router(inventory_router, prefix="/api/v1")
-app.include_router(world_router, prefix="/api/v1")
 
 
 @app.get("/healthcheck", include_in_schema=False)

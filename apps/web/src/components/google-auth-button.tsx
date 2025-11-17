@@ -76,7 +76,7 @@ export function GoogleAuthButton({
       onSuccess();
       return;
     }
-    router.push("/world");
+    router.push("/");
   }, [onSuccess, router]);
 
   useEffect(() => {
