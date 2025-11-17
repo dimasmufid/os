@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Response, status
 
 from src.auth.dependencies import CurrentUser
 from src.nodes.schemas import (
@@ -64,22 +64,32 @@ async def update_node(
     return NodePublic.model_validate(node)
 
 
-@router.delete("/nodes/{node_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/nodes/{node_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+)
 async def delete_node(
     node_id: UUID,
     current_user: CurrentUser,
     service: NodeService = Depends(get_node_service),
-) -> None:
+) -> Response:
     await service.delete_node(current_user.id, node_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.post("/nodes/reorder", status_code=status.HTTP_204_NO_CONTENT)
+@router.post(
+    "/nodes/reorder",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+)
 async def reorder_nodes(
     payload: list[NodeReorderItem],
     current_user: CurrentUser,
     service: NodeService = Depends(get_node_service),
-) -> None:
+) -> Response:
     await service.reorder_nodes(current_user.id, payload)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.post("/nodes/{node_id}/lock", response_model=NodePublic)
@@ -126,10 +136,12 @@ async def get_habit_schedule(
 @router.delete(
     "/nodes/{node_id}/habit-schedule",
     status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
 )
 async def delete_habit_schedule(
     node_id: UUID,
     current_user: CurrentUser,
     service: NodeService = Depends(get_node_service),
-) -> None:
+) -> Response:
     await service.delete_habit_schedule(current_user.id, node_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

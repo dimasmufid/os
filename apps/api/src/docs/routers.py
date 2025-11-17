@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, Response, status
 
 from src.auth.dependencies import CurrentUser
 from src.docs.schemas import DocCreate, DocPublic, DocUpdate
@@ -57,10 +57,15 @@ async def update_doc(
     return DocPublic.model_validate(doc)
 
 
-@router.delete("/{doc_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{doc_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+)
 async def delete_doc(
     doc_id: UUID,
     current_user: CurrentUser,
     service: DocService = Depends(get_doc_service),
-) -> None:
+) -> Response:
     await service.delete_doc(current_user.id, doc_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

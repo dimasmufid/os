@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Response, status
 
 from src.auth.dependencies import CurrentUser
 from src.tracks.schemas import (
@@ -114,19 +114,29 @@ async def update_track(
     )
 
 
-@router.delete("/{track_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{track_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+)
 async def delete_track(
     track_id: UUID,
     current_user: CurrentUser,
     service: TrackService = Depends(get_track_service),
-) -> None:
+) -> Response:
     await service.delete_track(current_user.id, track_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.post("/reorder", status_code=status.HTTP_204_NO_CONTENT)
+@router.post(
+    "/reorder",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+)
 async def reorder_tracks(
     payload: TrackReorderRequest,
     current_user: CurrentUser,
     service: TrackService = Depends(get_track_service),
-) -> None:
+) -> Response:
     await service.reorder_tracks(current_user.id, payload.items)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

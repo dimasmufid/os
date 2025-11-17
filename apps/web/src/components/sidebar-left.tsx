@@ -262,7 +262,12 @@ export function SidebarLeft({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar className="border-r-0" variant="inset" {...props}>
+    <Sidebar
+      className="border-r-0"
+      variant="inset"
+      collapsible="icon"
+      {...props}
+    >
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
         <NavMain items={data.navMain} />
